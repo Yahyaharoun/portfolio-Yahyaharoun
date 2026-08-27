@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: "Inter", system-ui, sans-serif;
+    
+    /* Light Mode Colors */
+    --background: 0 0% 98%;      /* #fafafa */
+    --foreground: 240 10% 4%;    /* #0a0a0f */
+    --accent: 245 97% 68%;       /* #6d5dfc */
+    --muted: 240 5% 90%;         /* #e6e6e6 */
+    --card: 0 0% 100%;           /* #ffffff */
+  }
+
+  .dark {
+    /* Premium Dark Mode Colors (Anthracite) */
+    --background: 216 14% 14%;    /* #1F2329 */
+    --foreground: 0 0% 96%;       /* #f5f5f7 */
+    --accent: 245 97% 68%;        /* #6d5dfc */
+    --muted: 212 13% 19%;         /* #2B3138 */
+    --card: 210 10% 23%;          /* #343A40 */
+  }
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-foreground;
+}
+
+/* Rotation du texte de positionnement dans le hero (4 roles, 2s chacun) */
+@keyframes role-cycle {
+  0%, 20% { transform: translateY(0); }
+  25%, 45% { transform: translateY(-2rem); }
+  50%, 70% { transform: translateY(-4rem); }
+  75%, 95% { transform: translateY(-6rem); }
+  100% { transform: translateY(0); }
+}
+.animate-role-cycle {
+  animation: role-cycle 8s ease-in-out infinite;
+}
+
+/* Reduit les animations pour les utilisateurs qui le demandent */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
