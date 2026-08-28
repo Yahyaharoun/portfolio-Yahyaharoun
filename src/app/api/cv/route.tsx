@@ -96,6 +96,14 @@ export async function GET() {
       console.error("Erreur d'envoi de notification push CV:", pushErr);
     }
 
+    // 6. ENREGISTRER L'ANALYTIQUE (Téléchargement CV)
+    try {
+      const supabaseAdmin = createServiceClient();
+      await supabaseAdmin.from("analytics").insert({ event_type: "cv_downloaded" });
+    } catch (analyticsErr) {
+      console.error("Erreur enregistrement analytique CV:", analyticsErr);
+    }
+
     // Render to stream
     const stream = await renderToStream(
       <CVDocument 
