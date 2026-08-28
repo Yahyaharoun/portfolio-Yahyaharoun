@@ -59,6 +59,41 @@ export async function GET() {
       technologies: p.technologies?.map((pt: any) => pt.technology) || []
     })) || [];
 
+    // 5. ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
+    try {
+      const { data: tokensData } = await supabase.from("admin_fcm_tokens").select("token");
+      
+      if (tokensData && tokensData.length > 0) {
+        const tokens = tokensData.map((t) => t.token);
+        const { adminMessaging } = await import("@/lib/firebase-admin");
+        
+        await adminMessaging.sendEachForMulticast({
+          tokens,
+          notification: {
+            title: "CV Téléchargé 📄",
+            body: "Quelqu'un vient de télécharger votre CV depuis le Portfolio !",
+          },
+          webpush: {
+            notification: {
+              icon: '/icons/icon-192x192.png',
+              badge: '/icons/icon-192x192.png',
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+            },
+            fcmOptions: {
+              link: "/admin/analytics"
+            }
+          },
+          data: {
+            url: "/admin/analytics",
+            title: "CV Téléchargé 📄",
+            body: "Quelqu'un vient de télécharger votre CV depuis le Portfolio !"
+          }
+        });
+      }
+    } catch (pushErr) {
+      console.error("Erreur d'envoi de notification push CV:", pushErr);
+    }
+
     // Render to stream
     const stream = await renderToStream(
       <CVDocument 

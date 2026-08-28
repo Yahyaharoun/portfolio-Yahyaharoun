@@ -46,6 +46,17 @@ export const requestForToken = async () => {
     // Attendre qu'il soit actif
     const readyRegistration = await navigator.serviceWorker.ready;
     
+    // ASTUCE IOS : Désinscrire l'ancienne souscription si elle est bloquée
+    try {
+      const existingSub = await readyRegistration.pushManager.getSubscription();
+      if (existingSub) {
+        await existingSub.unsubscribe();
+        console.log("Ancienne souscription Push nettoyée.");
+      }
+    } catch (e) {
+      console.log("Erreur lors du nettoyage de la souscription:", e);
+    }
+    
     if (!readyRegistration) {
       alert("Debug iOS: Service Worker non disponible après .ready");
       return null;
