@@ -79,7 +79,8 @@ export function PlaygroundSection() {
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, delay: 0.1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
           className="mx-auto max-w-2xl text-foreground/70 sm:text-xl leading-relaxed mb-8"
         >
           Une collection de mini-expériences interactives conçues pour démontrer mes compétences en architecture logicielle et en logique.
@@ -89,7 +90,8 @@ export function PlaygroundSection() {
         <motion.button
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true, delay: 0.2 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
           onClick={() => {
             setSoundEnabled(!soundEnabled);
             if (!soundEnabled) {
