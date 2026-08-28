@@ -6,7 +6,8 @@ import { SignJWT } from "jose";
 
 export async function loginAdmin(username: string, pin: string) {
   try {
-    if (username.trim().toLowerCase() !== "yahya haroun") {
+    const normalizedUsername = username.trim().toLowerCase().replace(/\s+/g, " ");
+    if (normalizedUsername !== "yahya haroun") {
       return { error: "Nom d'utilisateur incorrect." };
     }
     
@@ -23,9 +24,11 @@ export async function loginAdmin(username: string, pin: string) {
       .setExpirationTime("24h")
       .sign(secret);
       
+    const isSecure = process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_SITE_URL?.startsWith("https");
+    
     cookies().set("admin_token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isSecure,
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24

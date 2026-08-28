@@ -34,12 +34,24 @@ export const requestForToken = async () => {
     const messaging = getMessaging(app);
     const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
     
-    // Obtenir le Service Worker existant pour éviter les conflits avec next-pwa
-    const registration = await navigator.serviceWorker.getRegistration();
+    // S'assurer qu'un Service Worker est enregistré
+    let registration = await navigator.serviceWorker.getRegistration();
+    if (!registration) {
+      console.log("Enregistrement manuel du Service Worker...");
+      registration = await navigator.serviceWorker.register("/sw.js");
+    }
     
+    // Attendre qu'il soit actif
+    const readyRegistration = await navigator.serviceWorker.ready;
+    
+    if (!readyRegistration) {
+      console.log("Service Worker non disponible.");
+      return null;
+    }
+
     const currentToken = await getToken(messaging, { 
       vapidKey,
-      serviceWorkerRegistration: registration
+      serviceWorkerRegistration: readyRegistration
     });
     
     if (currentToken) {
