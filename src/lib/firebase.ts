@@ -18,7 +18,7 @@ export const requestForToken = async () => {
   try {
     const supported = await isSupported();
     if (!supported) {
-      console.log("Firebase Messaging n'est pas supporté par ce navigateur.");
+      alert("Debug iOS: Firebase isSupported() a retourné false. (Notifications Push non supportées ou iOS < 16.4)");
       return null;
     }
 
@@ -26,33 +26,31 @@ export const requestForToken = async () => {
     if (typeof window !== "undefined" && "Notification" in window) {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
-        console.log("Permission de notification refusée par l'utilisateur.");
+        alert("Debug iOS: Permission refusée. Statut = " + permission);
         return null;
       }
+    } else {
+      alert("Debug iOS: L'objet Notification n'existe pas dans window.");
+      return null;
     }
 
-    console.log("1. Initialisation FCM...");
     const messaging = getMessaging(app);
     const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
     
-    console.log("2. Vérification SW...");
     // S'assurer qu'un Service Worker est enregistré
     let registration = await navigator.serviceWorker.getRegistration();
     if (!registration) {
-      console.log("Enregistrement manuel du Service Worker...");
       registration = await navigator.serviceWorker.register("/sw.js");
     }
     
-    console.log("3. Attente SW Ready...");
     // Attendre qu'il soit actif
     const readyRegistration = await navigator.serviceWorker.ready;
     
     if (!readyRegistration) {
-      console.log("Service Worker non disponible.");
+      alert("Debug iOS: Service Worker non disponible après .ready");
       return null;
     }
 
-    console.log("4. SW Ready. Génération du token Firebase...");
     const currentToken = await Promise.race([
       getToken(messaging, { 
         vapidKey,
@@ -62,16 +60,16 @@ export const requestForToken = async () => {
     ]);
     
     if (currentToken) {
-      console.log("5. Token FCM obtenu:", currentToken);
       return currentToken;
     } else {
-      console.log("5. Aucun token FCM disponible. Permission à demander.");
+      alert("Debug iOS: getToken() a réussi mais a renvoyé un token vide/null.");
       return null;
     }
   } catch (err: any) {
-    console.error("Une erreur s'est produite lors de la récupération du token.", err);
     if (err.message === "FCM_TIMEOUT") {
-      alert("Firebase ne répond pas (Timeout 10s). Le Service Worker ou IndexedDB est bloqué.");
+      alert("Debug iOS: Firebase ne répond pas (Timeout 10s). Le Service Worker ou IndexedDB est bloqué.");
+    } else {
+      alert("Debug iOS Erreur: " + err.message + " | " + err.name);
     }
     return null;
   }
