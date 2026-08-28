@@ -8,26 +8,26 @@ const aboutItems = [
   {
     id: "parcours",
     icon: Briefcase,
-    title: "Parcours",
-    content: "Je suis étudiant en informatique et entrepreneur. Avant de me plonger pleinement dans le code, j'ai géré une boutique alimentaire. Cette expérience de terrain a forgé ma vision : je construis des outils pragmatiques, pensés pour fonctionner dans des conditions réelles."
+    title: "Mon parcours",
+    content: "Je suis étudiant en informatique et entrepreneur. Avant de me plonger pleinement dans le code, j'ai géré une boutique alimentaire. Cette expérience de terrain a forgé ma vision : je construis des outils pragmatiques, pensés pour fonctionner dans des conditions réelles et imparfaites."
   },
   {
     id: "vision",
     icon: Globe,
-    title: "Vision",
+    title: "Ma vision",
     content: "Les réalités africaines imposent des défis uniques. Je me suis spécialisé dans la création de Progressive Web Apps (PWA) et d'architectures Offline-First. L'objectif : l'application doit continuer à fonctionner et sauvegarder les données, même quand le réseau disparaît."
   },
   {
     id: "philosophie",
     icon: Cpu,
-    title: "Philosophie",
-    content: "L'intelligence artificielle transforme notre façon d'interagir. Je suis passionné par l'intégration de l'IA de manière utile et ciblée, non pas comme un gadget, mais comme un véritable assistant pour l'utilisateur final et l'automatisation des processus."
+    title: "Ma philosophie",
+    content: "L'intelligence artificielle transforme notre façon d'interagir. Je suis passionné par l'intégration de l'IA de manière utile et ciblée, non pas comme un gadget, mais comme un véritable assistant pour l'utilisateur final et pour l'automatisation de processus complexes."
   },
   {
-    id: "objectifs",
+    id: "objectif",
     icon: ShieldCheck,
-    title: "Objectifs",
-    content: "Développer de belles applications ne suffit plus. Mon but ultime est de me spécialiser en cybersécurité. J'apprends à concevoir des architectures DevSecOps, intégrant la sécurité dès la première ligne de code pour garantir la confidentialité des données."
+    title: "Mon objectif",
+    content: "Développer de belles applications ne suffit plus. Mon but ultime est de me spécialiser en cybersécurité. J'apprends à concevoir des architectures DevSecOps, intégrant la sécurité dès la première ligne de code pour garantir la fiabilité et la confidentialité des données."
   }
 ];
 

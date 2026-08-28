@@ -51,7 +51,7 @@ export function ExperiencesSection() {
   }, []);
 
   return (
-    <section id="experiences" className="mx-auto max-w-5xl px-4 sm:px-6 py-24 sm:py-32 scroll-mt-20">
+    <section id="experiences" className="mx-auto max-w-5xl px-4 sm:px-6 py-20 lg:py-32 scroll-mt-20">
       <div className="mb-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

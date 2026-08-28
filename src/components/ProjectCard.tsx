@@ -74,19 +74,19 @@ export default function ProjectCard({ project }: { project: Project }) {
           </div>
         </Link>
         
-        <div className="flex flex-col flex-1 p-6 sm:p-8" style={{ transform: "translateZ(20px)" }}>
+        <div className="flex flex-col flex-1 p-5 sm:p-8" style={{ transform: "translateZ(20px)" }}>
           {project.description && (
-            <p className="line-clamp-3 text-base text-foreground/80 leading-relaxed mb-6 font-medium">
+            <p className="line-clamp-3 text-sm sm:text-base text-foreground/80 leading-relaxed mb-4 sm:mb-6 font-medium">
               {project.description}
             </p>
           )}
 
           {project.technologies && project.technologies.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
               {project.technologies.slice(0, 5).map((tech) => (
                 <span
                   key={tech.id}
-                  className="rounded-full bg-accent/10 text-accent border border-accent/20 px-3 py-1 text-xs font-bold tracking-wide shadow-sm"
+                  className="rounded-full bg-accent/10 text-accent border border-accent/20 px-2.5 py-1 text-[10px] sm:text-xs font-bold tracking-wide shadow-sm"
                 >
                   {tech.name}
                 </span>
@@ -95,27 +95,27 @@ export default function ProjectCard({ project }: { project: Project }) {
           )}
 
           {project.impact && (
-            <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
               <div className="flex items-start gap-2">
-                <CheckCircle2 size={18} className="mt-0.5 shrink-0" />
-                <p className="text-sm font-semibold leading-relaxed">
+                <CheckCircle2 size={16} className="mt-0.5 shrink-0 sm:h-[18px] sm:w-[18px]" />
+                <p className="text-xs sm:text-sm font-semibold leading-relaxed">
                   {project.impact}
                 </p>
               </div>
             </div>
           )}
 
-          <div className="mt-auto pt-6 border-t border-black/10 dark:border-white/10 flex items-center justify-between gap-4">
-            <div className="flex gap-3">
+          <div className="mt-auto pt-4 sm:pt-6 border-t border-black/10 dark:border-white/10 flex items-center justify-between gap-4">
+            <div className="flex gap-2 sm:gap-3">
               {project.demo_url && (
                 <a 
                   href={project.demo_url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-10 w-10 rounded-full bg-accent text-white hover:bg-accent/90 transition-all hover:scale-110 shadow-md hover:shadow-accent/30"
+                  className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-accent text-white hover:bg-accent/90 transition-all hover:scale-110 shadow-md hover:shadow-accent/30"
                   title="Voir le site en direct"
                 >
-                  <Globe size={18} />
+                  <Globe size={16} className="sm:h-[18px] sm:w-[18px]" />
                 </a>
               )}
               {project.repo_url && (
@@ -123,19 +123,21 @@ export default function ProjectCard({ project }: { project: Project }) {
                   href={project.repo_url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-10 w-10 rounded-full bg-black/5 dark:bg-white/10 text-foreground hover:bg-black/10 dark:hover:bg-white/20 transition-all hover:scale-110"
+                  className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-black/5 dark:bg-white/10 text-foreground hover:bg-black/10 dark:hover:bg-white/20 transition-all hover:scale-110"
                   title="Code source"
                 >
-                  <Github size={18} />
+                  <Github size={16} className="sm:h-[18px] sm:w-[18px]" />
                 </a>
               )}
             </div>
             
             <Link 
               href={`/projects/${project.slug}`}
-              className="group/link flex items-center gap-2 text-sm font-black uppercase tracking-widest text-foreground hover:text-accent transition-colors"
+              className="group/link flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-foreground hover:text-accent transition-colors"
             >
-              Étude de cas <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
+              <span className="hidden sm:inline">Étude de cas</span>
+              <span className="sm:hidden">Détails</span>
+              <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Download, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { trackEvent } from "@/lib/analytics";
+
 export function DownloadCVButton() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -23,6 +25,9 @@ export function DownloadCVButton() {
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
+      
+      // Analytics
+      trackEvent("cv_download");
       
       setStatus("success");
       setTimeout(() => setStatus("idle"), 3000);

@@ -29,7 +29,7 @@ export function ProjectsSection() {
   }, []);
 
   return (
-    <section id="projects" className="mx-auto max-w-7xl px-6 py-32 scroll-mt-20 overflow-hidden">
+    <section id="projects" className="mx-auto max-w-7xl px-6 py-20 lg:py-32 scroll-mt-20 overflow-hidden">
       <div className="mb-20 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
         <div className="max-w-2xl">
           <motion.div

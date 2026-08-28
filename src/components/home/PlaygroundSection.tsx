@@ -45,7 +45,7 @@ export function PlaygroundSection() {
   }, [isInView, soundEnabled]);
 
   return (
-    <section id="playground" ref={containerRef} className="mx-auto max-w-7xl px-6 py-32 scroll-mt-20 overflow-hidden relative">
+    <section id="playground" ref={containerRef} className="mx-auto max-w-7xl px-6 py-20 lg:py-32 scroll-mt-20 overflow-hidden relative">
       {/* Decorative bg elements */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 

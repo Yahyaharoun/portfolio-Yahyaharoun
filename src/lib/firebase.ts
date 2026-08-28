@@ -25,7 +25,8 @@ export const requestForToken = async () => {
     const messaging = getMessaging(app);
     // VAPID KEY : Optionnel si configuré correctement dans le projet Firebase,
     // mais il est généralement recommandé d'utiliser vapidKey provenant des Web Push certificates de Firebase Console.
-    const currentToken = await getToken(messaging);
+    const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+    const currentToken = await getToken(messaging, { vapidKey });
     if (currentToken) {
       console.log("Token FCM obtenu:", currentToken);
       return currentToken;
