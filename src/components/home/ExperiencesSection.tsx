@@ -28,11 +28,18 @@ function getColorForType(type: string | null) {
 
 export async function ExperiencesSection() {
   const supabase = createClient();
-  const { data: experiences } = await supabase
-    .from("experiences")
-    .select("*")
-    .eq("is_published", true)
-    .order("start_date", { ascending: false });
+  let experiences = null;
+  
+  try {
+    const { data } = await supabase
+      .from("experiences")
+      .select("*")
+      .eq("is_published", true)
+      .order("start_date", { ascending: false });
+    experiences = data;
+  } catch (error) {
+    console.error("Erreur Experiences:", error);
+  }
 
   return (
     <section id="experiences" className="mx-auto max-w-5xl px-4 sm:px-6 py-24 sm:py-32 scroll-mt-20">

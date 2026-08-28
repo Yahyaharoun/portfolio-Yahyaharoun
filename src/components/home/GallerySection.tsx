@@ -5,12 +5,19 @@ import { Camera } from "lucide-react";
 
 export async function GallerySection() {
   const supabase = createClient();
-  const { data: items } = await supabase
-    .from("gallery")
-    .select("*")
-    .eq("is_published", true)
-    .order("sort_order", { ascending: true })
-    .limit(6);
+  let items = null;
+  
+  try {
+    const { data } = await supabase
+      .from("gallery")
+      .select("*")
+      .eq("is_published", true)
+      .order("sort_order", { ascending: true })
+      .limit(6);
+    items = data;
+  } catch (error) {
+    console.error("Erreur Gallery:", error);
+  }
 
   return (
     <section id="gallery" className="mx-auto max-w-6xl px-6 py-32 scroll-mt-20">

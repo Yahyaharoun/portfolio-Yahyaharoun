@@ -5,12 +5,19 @@ import { BookOpen, ArrowRight } from "lucide-react";
 
 export async function BlogPreviewSection() {
   const supabase = createClient();
-  const { data: articles } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("is_published", true)
-    .order("created_at", { ascending: false })
-    .limit(3);
+  let articles = null;
+  
+  try {
+    const { data } = await supabase
+      .from("articles")
+      .select("*")
+      .eq("is_published", true)
+      .order("created_at", { ascending: false })
+      .limit(3);
+    articles = data;
+  } catch (error) {
+    console.error("Erreur BlogPreview:", error);
+  }
 
   return (
     <section id="blog" className="mx-auto max-w-5xl px-6 py-32 scroll-mt-20">

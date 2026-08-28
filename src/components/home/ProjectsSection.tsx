@@ -5,12 +5,19 @@ import { ArrowRight } from "lucide-react";
 
 export async function ProjectsSection() {
   const supabase = createClient();
-  const { data: projects } = await supabase
-    .from("projects")
-    .select("*, technologies(*)")
-    .eq("is_published", true)
-    .order("sort_order", { ascending: true })
-    .limit(3);
+  let projects = null;
+  
+  try {
+    const { data } = await supabase
+      .from("projects")
+      .select("*, technologies(*)")
+      .eq("is_published", true)
+      .order("sort_order", { ascending: true })
+      .limit(3);
+    projects = data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des projets:", error);
+  }
 
   return (
     <section id="projects" className="mx-auto max-w-6xl px-6 py-32 scroll-mt-20">
