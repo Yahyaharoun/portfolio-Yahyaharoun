@@ -4,6 +4,8 @@ import TrendChart from "@/components/admin/TrendChart";
 import PWAStatusCard from "@/components/admin/PWAStatusCard";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export default async function AdminDashboardPage() {
   const supabase = createServiceClient();

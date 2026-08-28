@@ -3,6 +3,8 @@ import { Mail, Handshake, CheckCircle2 } from "lucide-react";
 import MessageRow from "./MessageRow";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export default async function AdminMessagesPage() {
   const supabase = createServiceClient();
