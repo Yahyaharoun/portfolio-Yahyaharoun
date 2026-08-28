@@ -39,11 +39,11 @@ export default function Footer() {
           
           {/* Brand Col */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block text-2xl font-black tracking-tighter mb-4 text-foreground">
-              YAHYA<span className="text-accent">.</span>
+            <Link href="/" className="inline-block text-2xl font-black tracking-tighter mb-4 text-foreground uppercase">
+              YAHYA HAROUN<span className="text-accent">.</span>
             </Link>
             <p className="text-foreground/70 max-w-md leading-relaxed font-medium">
-              Étudiant en informatique, développeur Full Stack et créateur de PWA. Je conçois des solutions digitales utiles et adaptées aux réalités africaines, avec un focus sur la sécurité.
+              Étudiant en informatique, développeur Full Stack et créateur de PWA & SaaS. Je conçois des solutions digitales utiles et adaptées aux réalités africaines, avec un focus sur la sécurité.
             </p>
           </div>
 

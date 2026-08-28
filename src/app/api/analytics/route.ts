@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import crypto from "crypto";
 
 export async function POST(req: Request) {
@@ -15,7 +15,8 @@ export async function POST(req: Request) {
     // Hash IP pour RGPD
     const ipHash = crypto.createHash('sha256').update(ip + (process.env.IP_SALT || "secret")).digest('hex');
 
-    const supabase = createClient();
+    // On utilise le Service Client pour forcer l'insertion même si RLS n'est pas bien configuré
+    const supabase = createServiceClient();
     
     const { error } = await supabase.from("analytics").insert({
       event_type,

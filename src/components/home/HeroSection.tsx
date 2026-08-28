@@ -40,10 +40,9 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl text-foreground mb-6"
+          className="text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl text-foreground mb-6 uppercase"
         >
-          Créateur de <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400">PWA</span> & <br className="hidden sm:block" />
-          Solutions <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">Performantes.</span>
+          YAHYA <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400">HAROUN</span>
         </motion.h1>
         
         <motion.p 

@@ -22,11 +22,26 @@ export const requestForToken = async () => {
       return null;
     }
 
+    // Demander la permission explicitement
+    if (typeof window !== "undefined" && "Notification" in window) {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        console.log("Permission de notification refusée par l'utilisateur.");
+        return null;
+      }
+    }
+
     const messaging = getMessaging(app);
-    // VAPID KEY : Optionnel si configuré correctement dans le projet Firebase,
-    // mais il est généralement recommandé d'utiliser vapidKey provenant des Web Push certificates de Firebase Console.
     const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
-    const currentToken = await getToken(messaging, { vapidKey });
+    
+    // Obtenir le Service Worker existant pour éviter les conflits avec next-pwa
+    const registration = await navigator.serviceWorker.getRegistration();
+    
+    const currentToken = await getToken(messaging, { 
+      vapidKey,
+      serviceWorkerRegistration: registration
+    });
+    
     if (currentToken) {
       console.log("Token FCM obtenu:", currentToken);
       return currentToken;
