@@ -59,11 +59,24 @@ export async function POST(request: Request) {
         await adminMessaging.sendEachForMulticast({
           tokens,
           notification: {
-            title: "Nouveau Message 📬",
-            body: `${parsed.data.first_name} a envoyé un message : ${parsed.data.subject || "Sans objet"}`,
+            title: "Nouveau message reçu 📬",
+            body: "Vous avez reçu une nouvelle demande depuis votre Portfolio.",
+          },
+          webpush: {
+            notification: {
+              icon: '/icons/icon-192x192.png',
+              badge: '/icons/icon-192x192.png',
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+              // Facultatif: sound si supporté
+            },
+            fcmOptions: {
+              link: "/admin/messages"
+            }
           },
           data: {
-            url: "/admin/messages" // Pour rediriger l'admin au clic
+            url: "/admin/messages",
+            title: "Nouveau message reçu 📬",
+            body: "Vous avez reçu une nouvelle demande depuis votre Portfolio."
           }
         });
         console.log(`Notification envoyée à ${tokens.length} appareils admin.`);
