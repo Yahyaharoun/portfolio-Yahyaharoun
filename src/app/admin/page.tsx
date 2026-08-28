@@ -1,5 +1,5 @@
 import { createServiceClient } from "@/lib/supabase/service";
-import { Users, FileDown, Mail, Handshake } from "lucide-react";
+import { Users, FileDown, Mail, Handshake, MessageCircle } from "lucide-react";
 import TrendChart from "@/components/admin/TrendChart";
 import PWAStatusCard from "@/components/admin/PWAStatusCard";
 
@@ -26,6 +26,12 @@ export default async function AdminDashboardPage() {
     .from("analytics")
     .select("*", { count: "exact", head: true })
     .eq("event_type", "cv_download");
+
+  // NOUVEAU : Total des clics WhatsApp
+  const { count: whatsappClicksCount } = await supabase
+    .from("analytics")
+    .select("*", { count: "exact", head: true })
+    .eq("event_type", "whatsapp_click");
 
   // 3. Messages non lus
   const { count: unreadMessagesCount } = await supabase
@@ -81,9 +87,10 @@ export default async function AdminDashboardPage() {
 
   const kpis = [
     { label: "Visiteurs uniques (7j)", value: uniqueVisitors, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
-    { label: "CV téléchargés (Total)", value: cvDownloadsCount || 0, icon: FileDown, color: "text-accent", bg: "bg-accent/10" },
+    { label: "Clics WhatsApp", value: whatsappClicksCount || 0, icon: MessageCircle, color: "text-green-500", bg: "bg-green-500/10" },
+    { label: "CV téléchargés", value: cvDownloadsCount || 0, icon: FileDown, color: "text-accent", bg: "bg-accent/10" },
     { label: "Messages non lus", value: unreadMessagesCount || 0, icon: Mail, color: "text-red-500", bg: "bg-red-500/10" },
-    { label: "Partenariats (Nouveaux)", value: newPartnershipsCount || 0, icon: Handshake, color: "text-amber-500", bg: "bg-amber-500/10" },
+    { label: "Nouveaux Partenariats", value: newPartnershipsCount || 0, icon: Handshake, color: "text-amber-500", bg: "bg-amber-500/10" },
   ];
 
   const timeAgo = (dateStr: string) => {
@@ -97,21 +104,21 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-8 pb-10">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Vue d'ensemble</h1>
-        <p className="mt-1 text-sm text-foreground/50">Vos performances et activités récentes en temps réel</p>
+        <h1 className="text-3xl font-extrabold text-foreground">Tableau de bord</h1>
+        <p className="mt-2 text-foreground/60">Vue d'ensemble de vos indicateurs de performance</p>
       </div>
 
       {/* KPIs Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
         {kpis.map((kpi, idx) => (
-          <div key={idx} className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-muted/30 p-6 backdrop-blur-md">
+          <div key={idx} className="flex flex-col gap-4 rounded-3xl border border-white/5 bg-black/5 dark:bg-white/5 p-6 backdrop-blur-md shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-foreground/70">{kpi.label}</span>
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${kpi.bg} ${kpi.color}`}>
-                <kpi.icon size={20} />
+              <span className="text-xs font-bold uppercase tracking-wider text-foreground/50">{kpi.label}</span>
+              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${kpi.bg} ${kpi.color}`}>
+                <kpi.icon size={24} />
               </div>
             </div>
-            <div className="text-3xl font-bold text-foreground">{kpi.value}</div>
+            <div className="text-4xl font-black text-foreground">{kpi.value}</div>
           </div>
         ))}
       </div>

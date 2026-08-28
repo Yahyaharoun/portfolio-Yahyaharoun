@@ -44,6 +44,35 @@ export async function POST(request: Request) {
       await supabase.from("analytics").insert({ event_type: "message_sent" });
     } catch (_) {}
 
+    // ----------------------------------------------------
+    // ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
+    // ----------------------------------------------------
+    try {
+      // 1. Récupérer les tokens FCM de l'admin
+      const { data: tokensData } = await supabase.from("admin_fcm_tokens").select("token");
+      
+      if (tokensData && tokensData.length > 0) {
+        const tokens = tokensData.map((t) => t.token);
+        
+        const { adminMessaging } = await import("@/lib/firebase-admin");
+        
+        await adminMessaging.sendEachForMulticast({
+          tokens,
+          notification: {
+            title: "Nouveau Message 📬",
+            body: `${parsed.data.first_name} a envoyé un message : ${parsed.data.subject || "Sans objet"}`,
+          },
+          data: {
+            url: "/admin/messages" // Pour rediriger l'admin au clic
+          }
+        });
+        console.log(`Notification envoyée à ${tokens.length} appareils admin.`);
+      }
+    } catch (pushErr) {
+      console.error("Erreur d'envoi de notification push:", pushErr);
+      // On ne bloque pas la réponse au client
+    }
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Erreur route contact:", err);

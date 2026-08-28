@@ -4,9 +4,10 @@ import crypto from "crypto";
 
 export async function POST(req: Request) {
   try {
-    const { page_path } = await req.json();
+    const body = await req.json();
+    const { event_type = "page_view", page_path = "/", metadata = {} } = body;
     
-    // Récupérer l'IP via les headers Vercel/Next.js
+    // Récupérer l'IP via les headers
     const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
     const userAgent = req.headers.get("user-agent") || "unknown";
     const referrer = req.headers.get("referer") || "direct";
@@ -17,11 +18,14 @@ export async function POST(req: Request) {
     const supabase = createClient();
     
     const { error } = await supabase.from("analytics").insert({
-      event_type: "page_view",
-      page_path: page_path || "/",
+      event_type,
+      page_path,
       ip_hash: ipHash,
       user_agent: userAgent,
       referrer: referrer,
+      // On peut stocker les métadonnées dans une colonne jsonb si elle existe, mais l'actuelle schema n'en a peut-être pas.
+      // Si la colonne n'existe pas, Supabase ignorera ou plantera. 
+      // Pour l'instant, on se limite aux champs existants ou on suppose que l'admin ajoutera un champ "metadata" JSONB.
     });
 
     if (error) {

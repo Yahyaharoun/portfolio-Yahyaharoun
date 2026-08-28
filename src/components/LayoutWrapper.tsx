@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { ScrollToTop } from "./ScrollToTop";
+import { FloatingNavigation } from "./FloatingNavigation";
+import { FloatingWhatsApp } from "./FloatingWhatsApp";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -16,7 +17,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         {children}
       </div>
       {!isAdmin && <Footer />}
-      {!isAdmin && <ScrollToTop />}
+      {!isAdmin && <FloatingNavigation />}
+      {!isAdmin && <FloatingWhatsApp />}
     </>
   );
 }

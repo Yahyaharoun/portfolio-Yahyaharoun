@@ -69,7 +69,33 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Erreur serveur, réessayez plus tard." }, { status: 500 });
     }
 
-    await supabase.from("analytics").insert({ event_type: "partnership_sent" });
+    try {
+      await supabase.from("analytics").insert({ event_type: "partnership_sent" });
+    } catch (_) {}
+
+    // ----------------------------------------------------
+    // ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
+    // ----------------------------------------------------
+    try {
+      const { data: tokensData } = await supabase.from("admin_fcm_tokens").select("token");
+      if (tokensData && tokensData.length > 0) {
+        const tokens = tokensData.map((t) => t.token);
+        const { adminMessaging } = await import("@/lib/firebase-admin");
+        
+        await adminMessaging.sendEachForMulticast({
+          tokens,
+          notification: {
+            title: "Nouveau Partenariat 🤝",
+            body: `${parsed.data.first_name} ${parsed.data.last_name} (${parsed.data.company || 'Indépendant'}) a fait une demande.`,
+          },
+          data: {
+            url: "/admin/messages" // ou une route dédiée partenariats
+          }
+        });
+      }
+    } catch (pushErr) {
+      console.error("Erreur d'envoi de notification push partenariat:", pushErr);
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
