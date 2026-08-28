@@ -73,4 +73,6 @@ export const requestForToken = async () => {
     if (err.message === "FCM_TIMEOUT") {
       alert("Firebase ne répond pas (Timeout 10s). Le Service Worker ou IndexedDB est bloqué.");
     }
+    return null;
+  }
 };
