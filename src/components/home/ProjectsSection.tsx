@@ -58,7 +58,8 @@ export function ProjectsSection() {
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, delay: 0.1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
             className="text-foreground/70 sm:text-xl leading-relaxed"
           >
             Découvrez une sélection de mes réalisations récentes : SaaS, applications Offline-First et plateformes e-commerce. Chaque projet est une réponse technique à un problème métier complexe.
