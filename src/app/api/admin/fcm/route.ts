@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 
 export async function POST(req: Request) {
   try {
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
       return new NextResponse("Token manquant", { status: 400 });
     }
 
-    const supabase = createClient();
+    const supabase = createServiceClient();
     
     // Vérification basique si l'admin est connecté (à adapter selon votre logique d'auth)
     const { data: session } = await supabase.auth.getSession();

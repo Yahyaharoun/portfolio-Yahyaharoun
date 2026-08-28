@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 
 const contactSchema = z.object({
   first_name: z.string().min(2, "Prénom trop court").max(100),
@@ -48,8 +49,9 @@ export async function POST(request: Request) {
     // ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
     // ----------------------------------------------------
     try {
+      const supabaseAdmin = createServiceClient();
       // 1. Récupérer les tokens FCM de l'admin
-      const { data: tokensData } = await supabase.from("admin_fcm_tokens").select("token");
+      const { data: tokensData } = await supabaseAdmin.from("admin_fcm_tokens").select("token");
       
       if (tokensData && tokensData.length > 0) {
         const tokens = tokensData.map((t) => t.token);

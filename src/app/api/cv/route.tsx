@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { renderToStream } from '@react-pdf/renderer';
 import { CVDocument } from '@/lib/cv/CVDocument';
 import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from "@/lib/supabase/service";
 
 export const dynamic = 'force-dynamic';
 
@@ -61,7 +62,8 @@ export async function GET() {
 
     // 5. ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
     try {
-      const { data: tokensData } = await supabase.from("admin_fcm_tokens").select("token");
+      const supabaseAdmin = createServiceClient();
+      const { data: tokensData } = await supabaseAdmin.from("admin_fcm_tokens").select("token");
       
       if (tokensData && tokensData.length > 0) {
         const tokens = tokensData.map((t) => t.token);
