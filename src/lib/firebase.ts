@@ -31,9 +31,11 @@ export const requestForToken = async () => {
       }
     }
 
+    console.log("1. Initialisation FCM...");
     const messaging = getMessaging(app);
     const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
     
+    console.log("2. Vérification SW...");
     // S'assurer qu'un Service Worker est enregistré
     let registration = await navigator.serviceWorker.getRegistration();
     if (!registration) {
@@ -41,6 +43,7 @@ export const requestForToken = async () => {
       registration = await navigator.serviceWorker.register("/sw.js");
     }
     
+    console.log("3. Attente SW Ready...");
     // Attendre qu'il soit actif
     const readyRegistration = await navigator.serviceWorker.ready;
     
@@ -49,20 +52,25 @@ export const requestForToken = async () => {
       return null;
     }
 
-    const currentToken = await getToken(messaging, { 
-      vapidKey,
-      serviceWorkerRegistration: readyRegistration
-    });
+    console.log("4. SW Ready. Génération du token Firebase...");
+    const currentToken = await Promise.race([
+      getToken(messaging, { 
+        vapidKey,
+        serviceWorkerRegistration: readyRegistration
+      }),
+      new Promise<null>((_, reject) => setTimeout(() => reject(new Error("FCM_TIMEOUT")), 10000))
+    ]);
     
     if (currentToken) {
-      console.log("Token FCM obtenu:", currentToken);
+      console.log("5. Token FCM obtenu:", currentToken);
       return currentToken;
     } else {
-      console.log("Aucun token FCM disponible. Permission à demander.");
+      console.log("5. Aucun token FCM disponible. Permission à demander.");
       return null;
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error("Une erreur s'est produite lors de la récupération du token.", err);
-    return null;
-  }
+    if (err.message === "FCM_TIMEOUT") {
+      alert("Firebase ne répond pas (Timeout 10s). Le Service Worker ou IndexedDB est bloqué.");
+    }
 };
