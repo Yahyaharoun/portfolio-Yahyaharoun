@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 
 const partnershipSchema = z.object({
   first_name: z.string().min(2).max(100),
@@ -77,7 +78,8 @@ export async function POST(request: Request) {
     // ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
     // ----------------------------------------------------
     try {
-      const { data: tokensData } = await supabase.from("admin_fcm_tokens").select("token");
+      const supabaseAdmin = createServiceClient();
+      const { data: tokensData } = await supabaseAdmin.from("admin_fcm_tokens").select("token");
       if (tokensData && tokensData.length > 0) {
         const tokens = tokensData.map((t) => t.token);
         const { adminMessaging } = await import("@/lib/firebase-admin");

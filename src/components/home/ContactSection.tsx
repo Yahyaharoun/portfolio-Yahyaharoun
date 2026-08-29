@@ -17,8 +17,8 @@ const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 const EMAIL = "yahyaharoun.657@gmail.com";
-const PHONE = "+227 690722465";
-const WHATSAPP = "227690722465";
+const PHONE = "+237 690722465";
+const WHATSAPP = "237690722465";
 const LOCATION = "Yaounde- Cameroun";
 
 const socialLinks = [

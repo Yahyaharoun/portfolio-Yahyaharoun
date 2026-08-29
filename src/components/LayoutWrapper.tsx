@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { FloatingNavigation } from "./FloatingNavigation";
-import { FloatingWhatsApp } from "./FloatingWhatsApp";
 import PushNotificationForeground from "./PushNotificationForeground";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
@@ -20,8 +19,6 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       </div>
       {!isAdmin && <Footer />}
       {!isAdmin && <FloatingNavigation />}
-      {!isAdmin && <FloatingWhatsApp />}
     </>
   );
 }
-

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Save, Plus, Trash2, Eye, LayoutTemplate, LayoutPanelLeft } from "lucide-react";
 import dynamic from "next/dynamic";
 import { CVDocument } from "@/lib/cv/CVDocument";
+import { saveCvData } from "../actions";
 
 // Chargement dynamique du PDFViewer uniquement côté client (pas de SSR)
 const PDFViewer = dynamic(() => import("@react-pdf/renderer").then(mod => mod.PDFViewer), {
@@ -89,12 +90,8 @@ export default function CVAdminPage() {
         professional_title: "Développeur Full Stack",
       };
 
-      if (cvId) {
-        await supabase.from("cv_data").update(payload).eq("id", cvId);
-      } else {
-        const { data } = await supabase.from("cv_data").insert(payload).select().single();
-        if (data) setCvId(data.id);
-      }
+      const { cvId: newCvId } = await saveCvData(payload, cvId);
+      if (newCvId) setCvId(newCvId);
       
       setMessage("CV mis à jour avec succès.");
     } catch (err) {

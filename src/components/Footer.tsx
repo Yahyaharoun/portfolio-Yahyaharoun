@@ -11,7 +11,7 @@ const WhatsAppIcon = ({ size = 24 }: { size?: number }) => (
 
 const socials = [
   { icon: Mail, href: "mailto:harounyahya01@gmail.com", label: "Email" },
-  { icon: WhatsAppIcon, href: "https://wa.me/2250787265147?text=Bonjour Yahya, je vous contacte depuis votre portfolio.", label: "WhatsApp" },
+  { icon: WhatsAppIcon, href: "https://wa.me/237690722465?text=Bonjour Yahya, je vous contacte depuis votre portfolio.", label: "WhatsApp" },
   { icon: Linkedin, href: "https://www.linkedin.com/in/yahya-haroun-87a446344", label: "LinkedIn" },
   { icon: Twitter, href: "https://twitter.com/yahyaharoun", label: "X (Twitter)" },
   { icon: Github, href: "https://github.com/yahyaharoun", label: "GitHub" },

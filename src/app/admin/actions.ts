@@ -157,3 +157,21 @@ export async function deleteMessage(id: string, type: 'message' | 'partnership')
   revalidatePath("/admin/messages");
   return { success: true };
 }
+
+export async function saveCvData(payload: any, cvId?: string | null) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+
+  if (cvId) {
+    const { error } = await supabase.from("cv_data").update(payload).eq("id", cvId);
+    if (error) throw new Error(error.message);
+  } else {
+    const { data, error } = await supabase.from("cv_data").insert(payload).select().single();
+    if (error) throw new Error(error.message);
+    cvId = data.id;
+  }
+  
+  revalidatePath("/admin/cv");
+  revalidatePath("/cv");
+  return { success: true, cvId };
+}
