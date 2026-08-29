@@ -280,36 +280,30 @@ export function CVDocument({ profile, cvData, experiences, projects }: CVDocumen
           
           <View style={{ marginTop: 8 }}>
             <Text style={styles.sectionTitleSidebar}>Contact</Text>
-            {profile?.email ? (
-              <View style={styles.contactItem}>
-                <View style={styles.contactIcon}><IconMail /></View>
-                <Text style={styles.contactText}>{profile.email}</Text>
-              </View>
-            ) : null}
-            {profile?.phone ? (
-              <View style={styles.contactItem}>
-                <View style={styles.contactIcon}><IconPhone /></View>
-                <Text style={styles.contactText}>{profile.phone}</Text>
-              </View>
-            ) : null}
-            {profile?.linkedin_url ? (
-              <View style={styles.contactItem}>
-                <View style={styles.contactIcon}><IconLink /></View>
-                <Link src={profile.linkedin_url} style={styles.contactLink}>LinkedIn</Link>
-              </View>
-            ) : null}
-            {profile?.github_url ? (
-              <View style={styles.contactItem}>
-                <View style={styles.contactIcon}><IconLink /></View>
-                <Link src={profile.github_url} style={styles.contactLink}>GitHub</Link>
-              </View>
-            ) : null}
-            {profile?.portfolio_url ? (
-              <View style={styles.contactItem}>
-                <View style={styles.contactIcon}><IconLink /></View>
-                <Link src={profile.portfolio_url} style={styles.contactLink}>Portfolio</Link>
-              </View>
-            ) : null}
+            <View style={styles.contactItem}>
+              <View style={styles.contactIcon}><IconMail /></View>
+              <Text style={styles.contactText}>{profile?.email || "yahyaharoun.657@gmail.com"}</Text>
+            </View>
+            <View style={styles.contactItem}>
+              <View style={styles.contactIcon}><IconPhone /></View>
+              <Text style={styles.contactText}>{profile?.phone || "+237 690722465"}</Text>
+            </View>
+            <View style={styles.contactItem}>
+              <View style={styles.contactIcon}><IconPhone /></View>
+              <Link src={`https://wa.me/237690722465`} style={styles.contactLink}>WhatsApp: +237 690722465</Link>
+            </View>
+            <View style={styles.contactItem}>
+              <View style={styles.contactIcon}><IconLink /></View>
+              <Link src={profile?.linkedin_url || "https://www.linkedin.com/in/yahya-haroun-87a446344"} style={styles.contactLink}>LinkedIn</Link>
+            </View>
+            <View style={styles.contactItem}>
+              <View style={styles.contactIcon}><IconLink /></View>
+              <Link src={profile?.github_url || "https://github.com/yahyaharoun"} style={styles.contactLink}>GitHub</Link>
+            </View>
+            <View style={styles.contactItem}>
+              <View style={styles.contactIcon}><IconLink /></View>
+              <Link src={profile?.portfolio_url || "https://yahyaharoun.netlify.app"} style={styles.contactLink}>Portfolio</Link>
+            </View>
           </View>
 
           {cvData?.skills && cvData.skills.length > 0 ? (
