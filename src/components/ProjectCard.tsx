@@ -35,6 +35,14 @@ export default function ProjectCard({ project }: { project: Project }) {
     y.set(0);
   };
 
+  const statusMap: Record<string, { label: string, color: string }> = {
+    en_cours: { label: "En cours", color: "bg-amber-500 text-white" },
+    termine: { label: "En production", color: "bg-emerald-500 text-white" },
+    archive: { label: "Archivé", color: "bg-gray-500 text-white" },
+  };
+
+  const projectStatus = project.status ? (statusMap[project.status] || statusMap.termine) : statusMap.termine;
+
   return (
     <motion.div
       style={{
@@ -68,9 +76,15 @@ export default function ProjectCard({ project }: { project: Project }) {
             </div>
           )}
           
-          <div className="absolute bottom-4 left-6 z-20">
+          <div className="absolute top-4 right-4 z-20">
+            <span className={`px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg ${projectStatus.color}`}>
+              {projectStatus.label}
+            </span>
+          </div>
+
+          <div className="absolute bottom-4 left-6 z-20 pr-6">
             <p className="text-xs font-black uppercase tracking-widest text-accent drop-shadow-md mb-1">{project.type}</p>
-            <h3 className="text-3xl font-extrabold text-white drop-shadow-lg">{project.title}</h3>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white drop-shadow-lg line-clamp-2">{project.title}</h3>
           </div>
         </Link>
         
@@ -105,40 +119,45 @@ export default function ProjectCard({ project }: { project: Project }) {
             </div>
           )}
 
-          <div className="mt-auto pt-4 sm:pt-6 border-t border-black/10 dark:border-white/10 flex items-center justify-between gap-4">
-            <div className="flex gap-2 sm:gap-3">
-              {project.demo_url && (
-                <a 
-                  href={project.demo_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-accent text-white hover:bg-accent/90 transition-all hover:scale-110 shadow-md hover:shadow-accent/30"
-                  title="Voir le site en direct"
-                >
-                  <Globe size={16} className="sm:h-[18px] sm:w-[18px]" />
-                </a>
-              )}
-              {project.repo_url && (
-                <a 
-                  href={project.repo_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-black/5 dark:bg-white/10 text-foreground hover:bg-black/10 dark:hover:bg-white/20 transition-all hover:scale-110"
-                  title="Code source"
-                >
-                  <Github size={16} className="sm:h-[18px] sm:w-[18px]" />
-                </a>
-              )}
+          <div className="mt-auto pt-4 sm:pt-6 border-t border-black/10 dark:border-white/10 flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
+                {project.demo_url && (
+                  <a 
+                    href={project.demo_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 h-9 sm:h-10 rounded-full bg-accent text-white hover:bg-accent/90 transition-all shadow-md hover:shadow-accent/30 hover:scale-105"
+                    title="Voir le site en direct"
+                  >
+                    <Globe size={16} className="shrink-0" />
+                    <span className="text-xs sm:text-sm font-bold truncate max-w-[180px]">
+                      {project.demo_url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                    </span>
+                  </a>
+                )}
+                {project.repo_url && (
+                  <a 
+                    href={project.repo_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-black/5 dark:bg-white/10 text-foreground hover:bg-black/10 dark:hover:bg-white/20 transition-all hover:scale-110"
+                    title="Code source"
+                  >
+                    <Github size={16} className="sm:h-[18px] sm:w-[18px]" />
+                  </a>
+                )}
+              </div>
+              
+              <Link 
+                href={`/projects/${project.slug}`}
+                className="group/link flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-foreground hover:text-accent transition-colors shrink-0"
+              >
+                <span className="hidden sm:inline">Étude de cas</span>
+                <span className="sm:hidden">Détails</span>
+                <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
+              </Link>
             </div>
-            
-            <Link 
-              href={`/projects/${project.slug}`}
-              className="group/link flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-foreground hover:text-accent transition-colors"
-            >
-              <span className="hidden sm:inline">Étude de cas</span>
-              <span className="sm:hidden">Détails</span>
-              <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
-            </Link>
           </div>
         </div>
       </motion.div>
