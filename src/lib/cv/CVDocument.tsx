@@ -302,7 +302,7 @@ export function CVDocument({ profile, cvData, experiences, projects }: CVDocumen
             </View>
             <View style={styles.contactItem}>
               <View style={styles.contactIcon}><IconLink /></View>
-              <Link src={profile?.portfolio_url || "https://yahyaharoun.netlify.app"} style={styles.contactLink}>Portfolio</Link>
+              <Link src={profile?.portfolio_url || "https://yahyaharoun.com"} style={styles.contactLink}>Portfolio</Link>
             </View>
           </View>
 
