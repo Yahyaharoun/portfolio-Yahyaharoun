@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import type { GalleryItem } from "@/types";
-import { Camera } from "lucide-react";
+import { Camera, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export async function GallerySection() {
   const supabase = createClient();
@@ -21,16 +22,24 @@ export async function GallerySection() {
 
   return (
     <section id="gallery" className="mx-auto max-w-6xl px-6 py-32 scroll-mt-20">
-      <div className="mb-16 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent mb-6">
-          <Camera size={16} />
-          <span>Moments & Événements</span>
+      <div className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+        <div className="max-w-2xl text-left">
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent mb-6">
+            <Camera size={16} />
+            <span>Moments & Événements</span>
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4">Galerie</h2>
+          <div className="mt-4 h-1 w-20 rounded-full bg-accent/50 mb-6 origin-left"></div>
+          <p className="text-foreground/70 sm:text-lg">
+            Quelques moments capturés lors de conférences, de formations ou sur le terrain.
+          </p>
         </div>
-        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4">Galerie</h2>
-        <div className="mt-4 mx-auto h-1 w-20 rounded-full bg-accent/50 mb-6"></div>
-        <p className="mx-auto max-w-2xl text-foreground/70 sm:text-lg">
-          Quelques moments capturés lors de conférences, de formations ou sur le terrain.
-        </p>
+        <div>
+          <Link href="/gallery" className="group flex items-center justify-center gap-3 rounded-full bg-foreground text-background px-8 py-4 font-bold text-sm uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(109,93,252,0.15)] hover:shadow-accent/30">
+            Explorer galerie
+            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
       </div>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

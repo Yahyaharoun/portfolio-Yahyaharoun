@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Experience } from "@/types";
-import { Briefcase, GraduationCap, Building2, Rocket, Store, CalendarDays } from "lucide-react";
+import { Briefcase, GraduationCap, Building2, Rocket, Store, CalendarDays, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("fr-FR", { month: "short", year: "numeric" });
@@ -41,7 +42,8 @@ export function ExperiencesSection() {
           .from("experiences")
           .select("*")
           .eq("is_published", true)
-          .order("start_date", { ascending: false });
+          .order("start_date", { ascending: false })
+          .limit(3);
         setExperiences(data as Experience[]);
       } catch (error) {
         console.error("Erreur Experiences:", error);
@@ -52,104 +54,108 @@ export function ExperiencesSection() {
 
   return (
     <section id="experiences" className="mx-auto max-w-5xl px-4 sm:px-6 py-20 lg:py-32 scroll-mt-20">
-      <div className="mb-20 text-center">
+      <div className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+        <div className="max-w-2xl text-left">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-5 py-2 text-sm font-semibold text-accent mb-6"
+          >
+            <Briefcase size={16} />
+            <span>Parcours Professionnel</span>
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl mb-6"
+          >
+            Mon Évolution
+          </motion.h2>
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-accent to-purple-500 mb-6 origin-left"
+          ></motion.div>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-foreground/70 sm:text-xl leading-relaxed"
+          >
+            Un aperçu de mon parcours professionnel, de mes formations et de mes expériences.
+          </motion.p>
+        </div>
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-5 py-2 text-sm font-semibold text-accent mb-6"
         >
-          <Briefcase size={16} />
-          <span>Parcours Professionnel</span>
+          <Link href="/experiences" className="group flex items-center justify-center gap-3 rounded-full bg-foreground text-background px-8 py-4 font-bold text-sm uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(109,93,252,0.15)] hover:shadow-accent/30">
+            Voir plus
+            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          </Link>
         </motion.div>
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl mb-6"
-        >
-          Mon Évolution
-        </motion.h2>
-        <motion.div 
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          className="mt-4 mx-auto h-1.5 w-24 rounded-full bg-gradient-to-r from-accent to-purple-500 mb-8"
-        ></motion.div>
       </div>
 
-      <div className="relative mx-auto max-w-4xl">
-        {/* Ligne centrale (visible uniquement sur desktop) */}
-        <div className="absolute left-8 sm:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-accent/0 via-accent/30 to-accent/0 transform sm:-translate-x-1/2 rounded-full hidden sm:block"></div>
-        {/* Ligne gauche (visible uniquement sur mobile) */}
-        <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-accent/0 via-accent/30 to-accent/0 rounded-full sm:hidden"></div>
-
-        <div className="space-y-16">
+      <div className="relative z-10">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 perspective-[1000px]">
           {experiences?.map((exp, index) => {
-            const isEven = index % 2 === 0;
             const typeColor = getColorForType(exp.type);
             
             return (
               <motion.div 
                 key={exp.id} 
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, rotateX: 10 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className={`relative flex flex-col sm:flex-row items-start sm:items-center ${isEven ? 'sm:flex-row-reverse' : ''} group pl-24 sm:pl-0`}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+                className="group relative"
               >
-                {/* Point central de la timeline */}
-                <div className={`absolute left-8 sm:left-1/2 top-0 sm:top-1/2 flex h-14 w-14 shrink-0 transform -translate-x-1/2 sm:-translate-y-1/2 items-center justify-center rounded-full border-4 border-background ${typeColor} shadow-[0_0_20px_rgba(109,93,252,0.2)] group-hover:scale-125 transition-transform duration-500 z-10`}>
-                  {getIconForType(exp.type)}
-                </div>
+                <motion.div 
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="h-full flex flex-col relative rounded-3xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-8 backdrop-blur-sm overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:border-accent/30"
+                >
+                  {/* Effet de lumière premium au hover */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-accent/0 via-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-                {/* Contenu (Carte) */}
-                <div className={`w-full sm:w-1/2 ${isEven ? 'sm:pl-16' : 'sm:pr-16'}`}>
-                  <motion.div 
-                    whileHover={{ y: -5, scale: 1.02 }}
-                    className="relative rounded-3xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-8 backdrop-blur-sm overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:border-accent/30"
-                  >
-                    {/* Effet de lumière premium au hover */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-accent/0 via-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  <div className={`mb-6 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-background/50 ${typeColor} shadow-[0_0_20px_rgba(109,93,252,0.1)] group-hover:scale-110 transition-transform duration-500`}>
+                    {getIconForType(exp.type)}
+                  </div>
 
-                    {/* Flèche pour desktop */}
-                    <div className={`hidden sm:block absolute top-1/2 h-5 w-5 transform -translate-y-1/2 rotate-45 border-b border-l border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 group-hover:border-accent/30 transition-colors duration-300 ${
-                      isEven ? '-left-2.5 border-r-0 border-t-0' : '-right-2.5 border-l-0 border-b-0 rotate-[225deg]'
-                    }`}></div>
-                    
-                    {/* Flèche pour mobile */}
-                    <div className="sm:hidden absolute top-5 -left-2.5 h-5 w-5 rotate-45 border-b border-l border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 group-hover:border-accent/30 transition-colors duration-300"></div>
-
-                    <div className="flex flex-col gap-3 relative z-10">
-                      <div className="flex items-center justify-between flex-wrap gap-2">
-                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${typeColor}`}>
-                          {exp.type}
-                        </span>
-                        <div className="flex items-center gap-2 text-sm font-bold text-foreground/50 bg-black/5 dark:bg-white/5 px-3 py-1 rounded-full">
-                          <CalendarDays size={14} />
-                          <span>{formatDate(exp.start_date)} — {exp.is_current ? "Présent" : exp.end_date ? formatDate(exp.end_date) : ""}</span>
-                        </div>
-                      </div>
-                      
-                      <h3 className="text-2xl font-extrabold text-foreground mt-2 group-hover:text-accent transition-colors duration-300">
-                        {exp.title}
-                      </h3>
-                      
-                      {exp.organization && (
-                        <div className="flex items-center gap-2 text-base font-semibold text-foreground/80">
-                          <Building2 size={16} className="text-accent" />
-                          {exp.organization}
-                        </div>
-                      )}
-                      
-                      {exp.description && (
-                        <p className="mt-3 text-base leading-relaxed text-foreground/70">
-                          {exp.description}
-                        </p>
-                      )}
+                  <div className="flex flex-col gap-3 relative z-10 flex-grow">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${typeColor}`}>
+                        {exp.type}
+                      </span>
                     </div>
-                  </motion.div>
-                </div>
+                    
+                    <h3 className="text-2xl font-extrabold text-foreground mt-2 group-hover:text-accent transition-colors duration-300">
+                      {exp.title}
+                    </h3>
+                    
+                    {exp.organization && (
+                      <div className="flex items-center gap-2 text-base font-semibold text-foreground/80">
+                        <Building2 size={16} className="text-accent" />
+                        {exp.organization}
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 text-sm font-bold text-foreground/50 mt-1">
+                      <CalendarDays size={14} />
+                      <span>{formatDate(exp.start_date)} — {exp.is_current ? "Présent" : exp.end_date ? formatDate(exp.end_date) : ""}</span>
+                    </div>
+                    
+                    {exp.description && (
+                      <p className="mt-4 text-base leading-relaxed text-foreground/70 line-clamp-4">
+                        {exp.description}
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
               </motion.div>
             );
           })}
