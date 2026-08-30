@@ -47,29 +47,67 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
       <div className="mt-10 space-y-8 text-foreground/70">
         {p.context && (
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Contexte</h2>
-            <p className="mt-2 leading-relaxed">{p.context}</p>
+            <h2 className="text-lg font-bold text-accent mb-3 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">🎯</span> Contexte & Problème
+            </h2>
+            <p className="leading-relaxed">{p.context}</p>
+          </div>
+        )}
+        {p.challenges && (
+          <div>
+            <h2 className="text-lg font-bold text-accent mb-3 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">🚧</span> Défis rencontrés
+            </h2>
+            <p className="leading-relaxed">{p.challenges}</p>
+          </div>
+        )}
+        {p.architecture && (
+          <div>
+            <h2 className="text-lg font-bold text-accent mb-3 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">🏗️</span> Architecture & Technique
+            </h2>
+            <p className="leading-relaxed">{p.architecture}</p>
           </div>
         )}
         {p.solution && (
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Solution</h2>
-            <p className="mt-2 leading-relaxed">{p.solution}</p>
+            <h2 className="text-lg font-bold text-accent mb-3 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">💡</span> Solution apportée
+            </h2>
+            <p className="leading-relaxed">{p.solution}</p>
           </div>
         )}
-        {p.description && (
+        {(p.results || p.impact) && (
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Fonctionnalités clés</h2>
-            <p className="mt-2 leading-relaxed">{p.description}</p>
-          </div>
-        )}
-        {p.impact && (
-          <div>
-            <h2 className="text-lg font-semibold text-foreground">Résultats / impact</h2>
-            <p className="mt-2 leading-relaxed">{p.impact}</p>
+            <h2 className="text-lg font-bold text-accent mb-3 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">📈</span> Impact & Résultats
+            </h2>
+            <p className="leading-relaxed">{p.results || p.impact}</p>
           </div>
         )}
       </div>
+
+      {p.video_url && (
+        <div className="mt-12 rounded-3xl border border-white/10 overflow-hidden bg-black/5 dark:bg-white/5 p-4 sm:p-6 backdrop-blur-md shadow-xl">
+          <h2 className="mb-4 text-xl font-bold text-foreground">Démonstration Vidéo</h2>
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black">
+            {/* Si c'est un lien YouTube, on peut l'embed, sinon on met un simple lien, ici on l'affiche s'il y a un composant video ou un embed iframe. Pour l'instant on met un iframe s'il semble être YouTube */}
+            {p.video_url.includes("youtube.com") || p.video_url.includes("youtu.be") ? (
+              <iframe 
+                src={p.video_url.replace("watch?v=", "embed/").replace("youtu.be/", "youtube.com/embed/")} 
+                title="Démonstration" 
+                className="absolute inset-0 h-full w-full border-none"
+                allowFullScreen
+              />
+            ) : (
+              <a href={p.video_url} target="_blank" rel="noreferrer" className="flex h-full w-full flex-col items-center justify-center gap-4 text-foreground/50 hover:text-accent transition-colors">
+                <span className="rounded-full bg-white/10 p-4"><svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></span>
+                Regarder la vidéo
+              </a>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="mt-10 flex gap-4">
         {p.demo_url && (

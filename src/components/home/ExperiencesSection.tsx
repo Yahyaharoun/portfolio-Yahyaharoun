@@ -2,54 +2,53 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { Experience } from "@/types";
-import { Briefcase, GraduationCap, Building2, Rocket, Store, CalendarDays, ArrowRight } from "lucide-react";
+import { Evolution } from "@/types";
+import { Briefcase, GraduationCap, Building2, Rocket, Store, CalendarDays, ArrowRight, Target, Code, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import * as LucideIcons from "lucide-react";
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("fr-FR", { month: "short", year: "numeric" });
-}
+const DefaultIcon = Play;
 
 function getIconForType(type: string | null) {
   switch (type) {
-    case "formation": return <GraduationCap size={20} />;
-    case "entrepreneuriat": return <Store size={20} />;
-    case "projet": return <Rocket size={20} />;
-    case "stage": return <Briefcase size={20} />;
+    case "bac": return <GraduationCap size={20} />;
+    case "univ": return <GraduationCap size={20} />;
+    case "pro": return <Briefcase size={20} />;
+    case "perso": return <Rocket size={20} />;
     default: return <Building2 size={20} />;
   }
 }
 
-function getColorForType(type: string | null) {
+function getColorForType(type: string | null, isObjective: boolean) {
+  if (isObjective) return "text-fuchsia-500 bg-fuchsia-500/10 border-fuchsia-500/20";
   switch (type) {
-    case "formation": return "text-blue-500 bg-blue-500/10 border-blue-500/20";
-    case "entrepreneuriat": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
-    case "projet": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
-    case "stage": return "text-purple-500 bg-purple-500/10 border-purple-500/20";
+    case "bac": return "text-blue-500 bg-blue-500/10 border-blue-500/20";
+    case "univ": return "text-indigo-500 bg-indigo-500/10 border-indigo-500/20";
+    case "pro": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
+    case "perso": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
     default: return "text-accent bg-accent/10 border-accent/20";
   }
 }
 
 export function ExperiencesSection() {
-  const [experiences, setExperiences] = useState<Experience[] | null>(null);
+  const [evolutions, setEvolutions] = useState<Evolution[] | null>(null);
 
   useEffect(() => {
-    async function fetchExperiences() {
+    async function fetchEvolutions() {
       const supabase = createClient();
       try {
         const { data } = await supabase
-          .from("experiences")
+          .from("evolutions")
           .select("*")
           .eq("is_published", true)
-          .order("start_date", { ascending: false })
-          .limit(3);
-        setExperiences(data as Experience[]);
+          .order("sort_order", { ascending: true });
+        setEvolutions(data as Evolution[]);
       } catch (error) {
-        console.error("Erreur Experiences:", error);
+        console.error("Erreur Evolutions:", error);
       }
     }
-    fetchExperiences();
+    fetchEvolutions();
   }, []);
 
   return (
@@ -101,68 +100,77 @@ export function ExperiencesSection() {
         </motion.div>
       </div>
 
-      <div className="relative z-10">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 perspective-[1000px]">
-          {experiences?.map((exp, index) => {
-            const typeColor = getColorForType(exp.type);
-            
-            return (
-              <motion.div 
-                key={exp.id} 
-                initial={{ opacity: 0, y: 50, rotateX: 10 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-                className="group relative"
-              >
-                <motion.div 
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="h-full flex flex-col relative rounded-3xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-8 backdrop-blur-sm overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:border-accent/30"
-                >
-                  {/* Effet de lumière premium au hover */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-accent/0 via-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+      <div className="relative z-10 mt-10">
+        <div className="relative">
+          {/* Ligne verticale (Timeline) */}
+          <div className="absolute left-8 sm:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-purple-500/50 to-transparent -translate-x-1/2 hidden sm:block"></div>
 
-                  <div className={`mb-6 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-background/50 ${typeColor} shadow-[0_0_20px_rgba(109,93,252,0.1)] group-hover:scale-110 transition-transform duration-500`}>
-                    {getIconForType(exp.type)}
+          <div className="space-y-12">
+            {evolutions?.map((evo, index) => {
+              const isEven = index % 2 === 0;
+              const typeColor = getColorForType(evo.type, evo.is_objective || false);
+              
+              let Icon = DefaultIcon;
+              if (evo.icon_name && (LucideIcons as any)[evo.icon_name]) {
+                Icon = (LucideIcons as any)[evo.icon_name];
+              }
+              
+              return (
+                <motion.div 
+                  key={evo.id} 
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className={`relative flex flex-col sm:flex-row items-center gap-6 sm:gap-12 ${isEven ? 'sm:flex-row-reverse' : ''}`}
+                >
+                  {/* Point central (Timeline Node) */}
+                  <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-4 border-background bg-accent items-center justify-center text-white shadow-[0_0_20px_rgba(109,93,252,0.4)] z-10">
+                    <Icon size={24} />
                   </div>
 
-                  <div className="flex flex-col gap-3 relative z-10 flex-grow">
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${typeColor}`}>
-                        {exp.type}
-                      </span>
-                    </div>
-                    
-                    <h3 className="text-2xl font-extrabold text-foreground mt-2 group-hover:text-accent transition-colors duration-300">
-                      {exp.title}
-                    </h3>
-                    
-                    {exp.organization && (
-                      <div className="flex items-center gap-2 text-base font-semibold text-foreground/80">
-                        <Building2 size={16} className="text-accent" />
-                        {exp.organization}
+                  {/* Carte Contenu */}
+                  <div className={`w-full sm:w-1/2 ${isEven ? 'sm:pl-16' : 'sm:pr-16'}`}>
+                    <div className={`relative rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02] ${evo.is_objective ? 'bg-fuchsia-500/5 border-fuchsia-500/20' : 'bg-black/5 dark:bg-white/5 hover:border-accent/30'}`}>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-foreground/20 backdrop-blur-md self-start">
+                          <CalendarDays size={14} />
+                          {evo.year}
+                        </span>
+                        {evo.is_objective && (
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-fuchsia-500 uppercase tracking-widest">
+                            <Target size={14} /> Objectif
+                          </span>
+                        )}
                       </div>
-                    )}
 
-                    <div className="flex items-center gap-2 text-sm font-bold text-foreground/50 mt-1">
-                      <CalendarDays size={14} />
-                      <span>{formatDate(exp.start_date)} — {exp.is_current ? "Présent" : exp.end_date ? formatDate(exp.end_date) : ""}</span>
+                      <h3 className="text-2xl font-black text-foreground mb-2 drop-shadow-sm">
+                        {evo.title}
+                      </h3>
+                      
+                      {evo.organization && (
+                        <div className="flex items-center gap-2 text-sm font-semibold text-accent mb-4">
+                          <Building2 size={16} />
+                          {evo.organization}
+                        </div>
+                      )}
+
+                      {evo.description && (
+                        <p className="text-base leading-relaxed text-foreground/70">
+                          {evo.description}
+                        </p>
+                      )}
                     </div>
-                    
-                    {exp.description && (
-                      <p className="mt-4 text-base leading-relaxed text-foreground/70 line-clamp-4">
-                        {exp.description}
-                      </p>
-                    )}
                   </div>
                 </motion.div>
-              </motion.div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
-        {(!experiences || experiences.length === 0) && (
-          <p className="text-foreground/50 text-center py-8">Chargement des expériences...</p>
+        {(!evolutions || evolutions.length === 0) && (
+          <p className="text-foreground/50 text-center py-8">Chargement de la timeline...</p>
         )}
       </div>
     </section>

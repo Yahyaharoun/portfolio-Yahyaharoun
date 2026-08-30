@@ -45,19 +45,15 @@ export function HeroSection() {
           YAHYA <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400">HAROUN</span>
         </motion.h1>
         
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto max-w-3xl text-foreground/70 sm:text-lg font-medium tracking-wide leading-relaxed uppercase"
-        >
-          Étudiant en informatique <span className="text-accent mx-1">•</span> Développeur Full Stack <span className="text-accent mx-1">•</span> Entrepreneur <span className="text-accent mx-1">•</span> Futur spécialiste Cybersécurité
-        </motion.p>
+        <div className="mx-auto max-w-3xl mt-4 h-16 w-full relative">
+          <AnimatedHeroText />
+        </div>
+        
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 mx-auto max-w-2xl text-foreground/60 text-sm sm:text-base leading-relaxed"
+          className="mt-6 mx-auto max-w-2xl text-foreground/70 sm:text-lg leading-relaxed"
         >
           Je conçois des solutions numériques utiles, sécurisées et adaptées aux réalités africaines.
         </motion.p>

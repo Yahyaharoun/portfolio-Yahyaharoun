@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -28,6 +29,9 @@ export default function ContactForm() {
         const data = await res.json();
         throw new Error(data.error || "Une erreur est survenue");
       }
+
+      // Track successful submission
+      trackEvent("contact_form_submitted");
 
       setStatus("success");
       form.reset();

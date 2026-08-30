@@ -32,6 +32,10 @@ export default function CVAdminPage() {
   const [education, setEducation] = useState<{ title: string; institution: string; year: string }[]>([]);
   const [customSections, setCustomSections] = useState<{ title: string; content: string }[]>([]);
 
+  // CV Mode state (from profile)
+  const [cvMode, setCvMode] = useState<"auto" | "manual">("auto");
+  const [manualCvUrl, setManualCvUrl] = useState("");
+
   // UI State
   const [showPreview, setShowPreview] = useState(true);
 
@@ -43,7 +47,11 @@ export default function CVAdminPage() {
     try {
       // 1. Fetch Profile
       const { data: profileData } = await supabase.from("profiles").select("*").limit(1).single();
-      if (profileData) setProfile(profileData);
+      if (profileData) {
+        setProfile(profileData);
+        setCvMode(profileData.cv_mode || "auto");
+        setManualCvUrl(profileData.manual_cv_url || "");
+      }
 
       // 2. Fetch CV Data
       const { data: cvData } = await supabase.from("cv_data").select("*").limit(1).single();
@@ -79,6 +87,19 @@ export default function CVAdminPage() {
     setSaving(true);
     setMessage("");
     try {
+      // 1. Sauvegarde du mode CV dans Profile
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({
+          cv_mode: cvMode,
+          manual_cv_url: manualCvUrl,
+          manual_cv_updated_at: cvMode === "manual" && manualCvUrl !== profile?.manual_cv_url ? new Date().toISOString() : profile?.manual_cv_updated_at
+        })
+        .eq("id", profile.id);
+      
+      if (profileError) throw profileError;
+
+      // 2. Sauvegarde des données du CV auto
       const payload = {
         summary,
         skills,
@@ -93,7 +114,7 @@ export default function CVAdminPage() {
       const { cvId: newCvId } = await saveCvData(payload, cvId);
       if (newCvId) setCvId(newCvId);
       
-      setMessage("CV mis à jour avec succès.");
+      setMessage("Paramètres du CV mis à jour avec succès.");
     } catch (err) {
       console.error(err);
       setMessage("Erreur lors de la sauvegarde.");
@@ -189,17 +210,50 @@ export default function CVAdminPage() {
           </div>
         )}
 
-        {/* Résumé */}
+        {/* Choix du Mode */}
         <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-muted p-6">
-          <h2 className="text-lg font-bold mb-4">Résumé Professionnel</h2>
-          <textarea
-            value={summary}
-            onChange={(e) => setSummary(e.target.value)}
-            rows={4}
-            className="w-full rounded-xl border border-black/10 dark:border-white/10 bg-background px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-            placeholder="Votre profil en quelques lignes..."
-          />
+          <h2 className="text-lg font-bold mb-4">Mode de génération du CV</h2>
+          <div className="flex gap-4 mb-6">
+            <label className={`flex-1 flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 p-4 transition-all ${cvMode === "auto" ? "border-accent bg-accent/10 text-accent" : "border-black/10 dark:border-white/10 text-foreground/50 hover:bg-black/5 dark:hover:bg-white/5"}`}>
+              <input type="radio" name="cvMode" value="auto" checked={cvMode === "auto"} onChange={() => setCvMode("auto")} className="hidden" />
+              <LayoutTemplate size={20} />
+              <span className="font-bold">Généré Automatiquement</span>
+            </label>
+            <label className={`flex-1 flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 p-4 transition-all ${cvMode === "manual" ? "border-accent bg-accent/10 text-accent" : "border-black/10 dark:border-white/10 text-foreground/50 hover:bg-black/5 dark:hover:bg-white/5"}`}>
+              <input type="radio" name="cvMode" value="manual" checked={cvMode === "manual"} onChange={() => setCvMode("manual")} className="hidden" />
+              <FileText size={20} />
+              <span className="font-bold">Importer un PDF</span>
+            </label>
+          </div>
+
+          {cvMode === "manual" && (
+            <div className="animate-in fade-in slide-in-from-top-2">
+              <label className="block text-sm font-semibold text-foreground mb-2">URL du fichier PDF *</label>
+              <input
+                type="url"
+                value={manualCvUrl}
+                onChange={(e) => setManualCvUrl(e.target.value)}
+                placeholder="https://..."
+                className="w-full rounded-xl border border-black/10 dark:border-white/10 bg-background px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              />
+              <p className="text-xs text-foreground/50 mt-2">Uploadez votre PDF dans le module Médias/Galerie ou utilisez un lien externe, puis collez l'URL ici.</p>
+            </div>
+          )}
         </div>
+
+        {/* Résumé */}
+        {cvMode === "auto" && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8">
+            <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-muted p-6">
+              <h2 className="text-lg font-bold mb-4">Résumé Professionnel</h2>
+              <textarea
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                rows={4}
+                className="w-full rounded-xl border border-black/10 dark:border-white/10 bg-background px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                placeholder="Votre profil en quelques lignes..."
+              />
+            </div>
 
         {/* Formations (Education) */}
         <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-muted p-6">
@@ -354,11 +408,12 @@ export default function CVAdminPage() {
             {customSections.length === 0 && <p className="text-sm text-foreground/50">Aucune donnée personnalisée.</p>}
           </div>
         </div>
-
+        </div>
+        )}
       </div>
 
       {/* SECTION APERÇU PDF */}
-      {showPreview && (
+      {showPreview && cvMode === "auto" && (
         <div className="hidden lg:block w-1/2 h-full bg-muted/30 rounded-2xl border border-black/10 dark:border-white/10 overflow-hidden sticky top-0">
           <PDFViewer width="100%" height="100%" className="border-none" showToolbar={false}>
             <CVDocument 

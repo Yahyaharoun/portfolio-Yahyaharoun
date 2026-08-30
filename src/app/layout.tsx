@@ -17,6 +17,19 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Yahya Haroun",
   },
+  openGraph: {
+    title: "Yahya Haroun — Développeur Full Stack & Cybersécurité",
+    description: "Portfolio de Yahya Haroun. Création d'applications web, SaaS et solutions numériques hors-ligne pour les commerçants africains.",
+    url: "https://yahyaharoun.com",
+    siteName: "Yahya Haroun",
+    locale: "fr_FR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yahya Haroun — Développeur Full Stack & Cybersécurité",
+    description: "Portfolio de Yahya Haroun. Création d'applications web, SaaS et solutions numériques hors-ligne pour les commerçants africains.",
+  },
 };
 
 export const viewport: Viewport = {

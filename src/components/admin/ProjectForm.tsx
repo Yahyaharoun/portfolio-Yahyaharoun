@@ -89,10 +89,14 @@ export default function ProjectForm({ project, onSuccess }: { project?: Project,
       status: formData.get("status") as Project["status"],
       is_published: formData.get("is_published") === "on",
       is_featured: formData.get("is_featured") === "on",
-      // Champs avancés
+      // Champs avancés (Étude de cas)
       context: showAdvanced ? String(formData.get("context") || "") : (project?.context || ""),
       solution: showAdvanced ? String(formData.get("solution") || "") : (project?.solution || ""),
       impact: showAdvanced ? String(formData.get("impact") || "") : (project?.impact || ""),
+      architecture: showAdvanced ? String(formData.get("architecture") || "") : (project?.architecture || ""),
+      challenges: showAdvanced ? String(formData.get("challenges") || "") : (project?.challenges || ""),
+      results: showAdvanced ? String(formData.get("results") || "") : (project?.results || ""),
+      video_url: showAdvanced ? String(formData.get("video_url") || "") : (project?.video_url || ""),
     };
 
     try {
@@ -211,16 +215,28 @@ export default function ProjectForm({ project, onSuccess }: { project?: Project,
                 </div>
               </div>
               <div>
-                <label className={labelClass}>Contexte</label>
-                <textarea name="context" rows={2} defaultValue={project?.context ?? ""} className={inputClass} />
+                <label className={labelClass}>Contexte / Problème</label>
+                <textarea name="context" rows={2} defaultValue={project?.context ?? ""} className={inputClass} placeholder="Quel était le besoin initial ?" />
+              </div>
+              <div>
+                <label className={labelClass}>Défis rencontrés</label>
+                <textarea name="challenges" rows={2} defaultValue={project?.challenges ?? ""} className={inputClass} placeholder="Quelles difficultés avez-vous surmontées ?" />
               </div>
               <div>
                 <label className={labelClass}>Solution apportée</label>
-                <textarea name="solution" rows={2} defaultValue={project?.solution ?? ""} className={inputClass} />
+                <textarea name="solution" rows={2} defaultValue={project?.solution ?? ""} className={inputClass} placeholder="Comment avez-vous résolu le problème ?" />
+              </div>
+              <div>
+                <label className={labelClass}>Architecture & Technologies (Détails)</label>
+                <textarea name="architecture" rows={2} defaultValue={project?.architecture ?? ""} className={inputClass} placeholder="Décrivez la stack technique et l'architecture..." />
               </div>
               <div>
                 <label className={labelClass}>Impact / Résultats</label>
-                <textarea name="impact" rows={2} defaultValue={project?.impact ?? ""} className={inputClass} />
+                <textarea name="results" rows={2} defaultValue={project?.results ?? project?.impact ?? ""} className={inputClass} placeholder="Quels sont les résultats concrets obtenus ?" />
+              </div>
+              <div>
+                <label className={labelClass}>Lien vidéo YouTube / Loom (Optionnel)</label>
+                <input name="video_url" defaultValue={project?.video_url ?? ""} className={inputClass} placeholder="https://..." />
               </div>
             </div>
           )}

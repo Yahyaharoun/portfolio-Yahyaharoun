@@ -8,6 +8,7 @@ import {
   Copy, Check, ExternalLink, Send, Twitter
 } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
+import { trackEvent } from "@/lib/analytics";
 
 // SVG Officiel WhatsApp
 const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
@@ -120,10 +121,12 @@ export function ContactSection() {
                 </div>
               </div>
               <div className="flex gap-1">
-                <a href={`tel:${PHONE}`} className="p-2 rounded-lg text-foreground/40 hover:text-accent hover:bg-accent/10 transition-all" aria-label="Appeler">
+                <a href={`tel:${PHONE}`} onClick={() => trackEvent("contact_phone_click")} className="p-2 rounded-lg text-foreground/40 hover:text-accent hover:bg-accent/10 transition-all" aria-label="Appeler">
                   <Phone size={16} />
                 </a>
-                <CopyButton value={PHONE} label="Numéro" />
+                <span onClick={() => trackEvent("contact_phone_copy")}>
+                  <CopyButton value={PHONE} label="Numéro" />
+                </span>
               </div>
             </div>
 
@@ -139,10 +142,12 @@ export function ContactSection() {
                 </div>
               </div>
               <div className="flex gap-1">
-                <a href={`mailto:${EMAIL}`} className="p-2 rounded-lg text-foreground/40 hover:text-accent hover:bg-accent/10 transition-all" aria-label="Envoyer un email">
+                <a href={`mailto:${EMAIL}`} onClick={() => trackEvent("contact_email_click")} className="p-2 rounded-lg text-foreground/40 hover:text-accent hover:bg-accent/10 transition-all" aria-label="Envoyer un email">
                   <Send size={16} />
                 </a>
-                <CopyButton value={EMAIL} label="Adresse e-mail" />
+                <span onClick={() => trackEvent("contact_email_copy")}>
+                  <CopyButton value={EMAIL} label="Adresse e-mail" />
+                </span>
               </div>
             </div>
 
@@ -163,6 +168,7 @@ export function ContactSection() {
             href={`https://wa.me/${WHATSAPP}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackEvent("contact_whatsapp_click")}
             className="group flex items-center justify-center gap-3 rounded-2xl border border-green-500/20 bg-green-500/10 p-4 text-green-500 transition-all hover:bg-green-500/20 hover:scale-[1.02] active:scale-[0.98]"
           >
             <WhatsAppIcon size={20} />
@@ -180,6 +186,7 @@ export function ContactSection() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent("social_click", undefined, { social: label })}
                   className={`flex items-center gap-2.5 rounded-xl border border-black/10 dark:border-white/10 px-3 py-2.5 text-sm text-foreground/70 transition-all hover:scale-105 active:scale-95 ${color}`}
                 >
                   <Icon size={16} />

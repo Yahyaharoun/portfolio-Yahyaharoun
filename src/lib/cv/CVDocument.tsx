@@ -254,9 +254,10 @@ interface CVDocumentProps {
   cvData: any;
   experiences: any[];
   projects: any[];
+  certifications?: any[];
 }
 
-export function CVDocument({ profile, cvData, experiences, projects }: CVDocumentProps) {
+export function CVDocument({ profile, cvData, experiences, projects, certifications = [] }: CVDocumentProps) {
   const formatMonthYear = (dateStr: string) => {
     if (!dateStr) return '';
     const d = new Date(dateStr);
@@ -342,6 +343,19 @@ export function CVDocument({ profile, cvData, experiences, projects }: CVDocumen
                   <Text style={styles.educationTitle}>{edu.title}</Text>
                   <Text style={styles.educationInst}>{edu.institution}</Text>
                   <Text style={styles.educationYear}>{edu.year}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {certifications && certifications.length > 0 ? (
+            <View>
+              <Text style={styles.sectionTitleSidebar}>Certifications</Text>
+              {certifications.map((cert: any, idx: number) => (
+                <View key={idx} style={styles.educationItem}>
+                  <Text style={styles.educationTitle}>{cert.title}</Text>
+                  <Text style={styles.educationInst}>{cert.issuer}</Text>
+                  <Text style={styles.educationYear}>{cert.issue_date || ""}</Text>
                 </View>
               ))}
             </View>

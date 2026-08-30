@@ -13,6 +13,11 @@ export type Profile = {
   instagram_url: string | null;
   youtube_url: string | null;
   role: "admin" | "editor";
+  cv_mode?: "auto" | "manual";
+  manual_cv_url?: string | null;
+  manual_cv_updated_at?: string | null;
+  stats_experience_years?: number;
+  stats_projects_completed?: number;
 };
 
 export type Technology = {
@@ -39,6 +44,12 @@ export type Project = {
   is_featured: boolean;
   sort_order: number;
   created_at: string;
+  architecture?: string | null;
+  challenges?: string | null;
+  results?: string | null;
+  video_url?: string | null;
+  article_id?: string | null;
+  gallery_id?: string | null;
   technologies?: Technology[];
   project_images?: { id: string; image_url: string; caption: string | null }[];
 };
@@ -95,6 +106,8 @@ export type Article = {
   is_published: boolean;
   published_at: string | null;
   created_at?: string;
+  read_time_minutes?: number;
+  tags?: string[];
 };
 
 export type PartnershipRequest = {
@@ -131,4 +144,30 @@ export type CvData = {
   skills: string[];
   languages: { name: string; level: string }[];
   education: { title: string; institution: string; year: string }[];
+};
+
+export type Evolution = {
+  id: string;
+  title: string;
+  organization: string;
+  description: string | null;
+  year: string;
+  logo_url: string | null;
+  document_url: string | null;
+  sort_order: number;
+  is_published: boolean;
+  is_goal: boolean;
+  created_at?: string;
+};
+
+export type Vision = {
+  id: string;
+  title: string;
+  description: string;
+  category: "valeur" | "afrique" | "ia" | "cybersecurite" | "entrepreneuriat" | "developpement" | "autre";
+  icon_name: string | null;
+  image_url: string | null;
+  sort_order: number;
+  is_published: boolean;
+  created_at?: string;
 };

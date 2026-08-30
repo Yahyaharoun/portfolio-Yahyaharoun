@@ -175,3 +175,78 @@ export async function saveCvData(payload: any, cvId?: string | null) {
   revalidatePath("/cv");
   return { success: true, cvId };
 }
+
+export async function saveEvolution(payload: any, id?: string) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+  if (id) {
+    const { error } = await supabase.from("evolutions").update(payload).eq("id", id);
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase.from("evolutions").insert(payload);
+    if (error) throw new Error(error.message);
+  }
+  revalidatePath("/admin/evolutions");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function deleteEvolution(id: string) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+  const { error } = await supabase.from("evolutions").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/evolutions");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function saveCertification(payload: any, id?: string) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+  if (id) {
+    const { error } = await supabase.from("certifications").update(payload).eq("id", id);
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase.from("certifications").insert(payload);
+    if (error) throw new Error(error.message);
+  }
+  revalidatePath("/admin/certifications");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function deleteCertification(id: string) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+  const { error } = await supabase.from("certifications").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/certifications");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function saveVision(payload: any, id?: string) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+  if (id) {
+    const { error } = await supabase.from("visions").update(payload).eq("id", id);
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase.from("visions").insert(payload);
+    if (error) throw new Error(error.message);
+  }
+  revalidatePath("/admin/visions");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function deleteVision(id: string) {
+  await verifyAdmin();
+  const supabase = createServiceClient();
+  const { error } = await supabase.from("visions").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/visions");
+  revalidatePath("/");
+  return { success: true };
+}

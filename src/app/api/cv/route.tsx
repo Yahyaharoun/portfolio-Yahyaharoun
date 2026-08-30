@@ -17,6 +17,11 @@ export async function GET() {
       .limit(1)
       .single();
 
+    // Redirection vers le CV manuel si configuré
+    if (profile?.cv_mode === 'manual' && profile?.manual_cv_url) {
+      return NextResponse.redirect(profile.manual_cv_url);
+    }
+
     // 2. Fetch CV data (skills, languages, etc.)
     let { data: cvData } = await supabase
       .from('cv_data')
@@ -46,7 +51,6 @@ export async function GET() {
       .order('start_date', { ascending: false });
 
     // 4. Fetch featured projects (pour le CV)
-    // On utilise is_featured pour l'instant
     const { data: projects } = await supabase
       .from('projects')
       .select('*, technologies:project_technologies(technology:technologies(*))')
@@ -59,6 +63,28 @@ export async function GET() {
       ...p,
       technologies: p.technologies?.map((pt: any) => pt.technology) || []
     })) || [];
+
+    // 4b. Fetch Evolutions & Certifications (Single Source of Truth)
+    const { data: evolutions } = await supabase
+      .from('evolutions')
+      .select('*')
+      .eq('is_published', true)
+      .order('sort_order', { ascending: true });
+
+    const { data: certifications } = await supabase
+      .from('certifications')
+      .select('*')
+      .eq('is_published', true)
+      .order('sort_order', { ascending: true });
+
+    // Remplacer les vieilles formations manuelles par les Evolutions dynamiques
+    if (evolutions && evolutions.length > 0) {
+      cvData.education = evolutions.map(evo => ({
+        title: evo.title,
+        institution: evo.organization,
+        year: evo.year
+      }));
+    }
 
     // 5. ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
     try {
@@ -110,7 +136,8 @@ export async function GET() {
         profile={profile || {}} 
         cvData={cvData} 
         experiences={experiences || []} 
-        projects={formattedProjects} 
+        projects={formattedProjects}
+        certifications={certifications || []}
       />
     );
 

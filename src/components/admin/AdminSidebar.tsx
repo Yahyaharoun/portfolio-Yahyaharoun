@@ -16,14 +16,20 @@ import {
   Menu,
   X,
   LogOut,
-  BookOpen
+  BookOpen,
+  Milestone,
+  Award,
+  Compass
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/projects", label: "Projets", icon: FolderKanban },
+  { href: "/admin/evolutions", label: "Mon Évolution", icon: Milestone },
   { href: "/admin/experiences", label: "Expériences", icon: History },
+  { href: "/admin/certifications", label: "Certifications", icon: Award },
+  { href: "/admin/visions", label: "Vision & Valeurs", icon: Compass },
   { href: "/admin/gallery", label: "Galerie", icon: ImageIcon },
   { href: "/admin/blog", label: "Blog", icon: BookOpen },
   { href: "/admin/cv", label: "CV", icon: FileText },

@@ -3,13 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, Loader2, AlertTriangle, X } from "lucide-react";
-import { deleteProject, deleteExperience, deleteGalleryItem, deleteArticle } from "@/app/admin/actions";
+import { deleteProject, deleteExperience, deleteGalleryItem, deleteArticle, deleteEvolution, deleteCertification, deleteVision } from "@/app/admin/actions";
 
 const deleteActions: Record<string, (id: string) => Promise<any>> = {
   projects: deleteProject,
   experiences: deleteExperience,
   gallery: deleteGalleryItem,
   articles: deleteArticle,
+  evolution: deleteEvolution,
+  certification: deleteCertification,
+  vision: deleteVision,
 };
 
 export default function DeleteEntityButton({
