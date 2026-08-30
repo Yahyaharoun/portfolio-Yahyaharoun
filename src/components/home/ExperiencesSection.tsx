@@ -154,7 +154,7 @@ export function ExperiencesSection() {
 
   return (
     <section id="experiences" className="mx-auto max-w-5xl px-4 sm:px-6 py-20 lg:py-32 scroll-mt-20">
-      <div className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+      <div className="mb-10 flex flex-col gap-8">
         <div className="max-w-2xl text-left">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -189,19 +189,20 @@ export function ExperiencesSection() {
             Un aperçu de mon parcours professionnel, de mes formations et de mes certifications.
           </motion.p>
         </div>
+        
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          className="w-full sm:w-auto self-start"
         >
-          <Link href="/experiences" className="group flex items-center justify-center gap-3 rounded-full bg-foreground text-background px-8 py-4 font-bold text-sm uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(109,93,252,0.15)] hover:shadow-accent/30">
-            Voir plus
-            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          <Link href="/experiences" className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-black dark:bg-white text-white dark:text-black px-8 py-4 font-bold text-sm uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow-lg">
+            VOIR PLUS <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </Link>
         </motion.div>
       </div>
 
-      <div className="relative z-10 mt-10 min-h-[400px]">
+      <div className="relative z-10 min-h-[400px]">
         {loading ? (
           <div className="flex h-[400px] items-center justify-center">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent border-t-transparent" />
@@ -217,55 +218,43 @@ export function ExperiencesSection() {
                   onClick={() => {
                     if (isVisible) setSelectedExperience(evo);
                   }}
-                  className={`relative flex h-[350px] sm:h-[400px] w-full flex-col justify-between overflow-hidden rounded-[2.5rem] border border-white/10 p-8 shadow-2xl transition-all duration-500
+                  className={`relative flex h-[350px] sm:h-[400px] w-full flex-col justify-end overflow-hidden rounded-2xl p-6 shadow-2xl transition-all duration-500 cursor-pointer
                     ${isVisible 
-                      ? (evo.is_goal ? 'bg-gradient-to-br from-fuchsia-900/80 to-fuchsia-900/40 backdrop-blur-xl border-fuchsia-500/30 cursor-pointer hover:ring-2 hover:ring-fuchsia-500/50' : 'bg-gradient-to-br from-black/80 to-black/40 dark:from-white/10 dark:to-white/5 backdrop-blur-xl cursor-pointer hover:ring-2 hover:ring-accent/50')
-                      : 'bg-black/40 dark:bg-white/5 backdrop-blur-sm'
+                      ? 'bg-[#2a2a2a] ring-1 ring-white/10 opacity-100'
+                      : 'bg-[#2a2a2a] opacity-40 blur-sm scale-95 pointer-events-none'
                     }
                   `}
                 >
-                  <div className="relative z-10 flex flex-col h-full pointer-events-none">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${evo.is_goal ? 'bg-fuchsia-500/20 text-fuchsia-500' : 'bg-accent/20 text-accent'}`}>
+                  {isVisible && (
+                    <div className="absolute inset-0 flex flex-col justify-between p-6 z-10 pointer-events-none">
+                      <div className="flex items-start justify-between w-full">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
                           {getIconForType(evo.typeLabel)}
                         </div>
-                        <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-white/10 backdrop-blur-md border border-white/10">
-                          {evo.typeLabel}
-                        </span>
-                        <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-white/10 backdrop-blur-md border border-white/10">
-                          <CalendarDays size={14} />
-                          {evo.date}
-                        </span>
+                        <div className="flex gap-2">
+                          <span className="inline-flex items-center rounded-full bg-black/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white border border-white/5">
+                            {evo.typeLabel}
+                          </span>
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white border border-white/5">
+                            <CalendarDays size={12} />
+                            {evo.date}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-auto">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-1">
+                          {evo.title}
+                        </h3>
+                        {evo.organization && (
+                          <div className="flex items-center gap-2 text-sm font-semibold text-accent uppercase tracking-wide">
+                            <Building2 size={14} />
+                            {evo.organization}
+                          </div>
+                        )}
                       </div>
                     </div>
-
-                    <div className="mt-auto">
-                      <h3 className="mb-2 text-2xl sm:text-3xl font-black text-white drop-shadow-sm">
-                        {evo.title}
-                      </h3>
-                      
-                      {evo.organization && (
-                        <div className="flex items-center gap-2 text-sm font-semibold text-accent mb-4">
-                          <Building2 size={16} />
-                          {evo.organization}
-                        </div>
-                      )}
-
-                      {evo.description && (
-                        <>
-                          <p className="text-sm sm:text-base leading-relaxed text-white/80 line-clamp-3">
-                            {evo.description}
-                          </p>
-                          {isVisible && (
-                            <div className="mt-4 text-accent font-bold text-sm flex items-center gap-1 transition-colors">
-                              Détails <ArrowRight size={16} />
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
+                  )}
                 </div>
               );
             }}
