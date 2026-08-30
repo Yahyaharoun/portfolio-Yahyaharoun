@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Save, Plus, Trash2, Eye, LayoutTemplate, LayoutPanelLeft } from "lucide-react";
+import { Save, Plus, Trash2, Eye, LayoutTemplate, LayoutPanelLeft, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
 import { CVDocument } from "@/lib/cv/CVDocument";
 import { saveCvData } from "../actions";
