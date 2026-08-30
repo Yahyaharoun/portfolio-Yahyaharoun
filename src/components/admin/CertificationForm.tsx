@@ -18,10 +18,11 @@ export default function CertificationForm({ initialData }: { initialData?: Certi
     setError("");
 
     const formData = new FormData(e.currentTarget);
+    const issueDateRaw = formData.get("issue_date") as string;
     const payload = {
       title: formData.get("title") as string,
       issuer: formData.get("issuer") as string,
-      issue_date: formData.get("issue_date") as string,
+      issue_date: issueDateRaw ? issueDateRaw : null,
       credential_url: formData.get("credential_url") as string,
       image_url: formData.get("image_url") as string,
     };
@@ -94,11 +95,10 @@ export default function CertificationForm({ initialData }: { initialData?: Certi
             Date d'obtention
           </label>
           <input
-            type="text"
+            type="date"
             id="issue_date"
             name="issue_date"
             defaultValue={initialData?.issue_date || ""}
-            placeholder="Ex: Octobre 2023"
             className="w-full rounded-lg border border-black/20 dark:border-white/20 bg-background px-4 py-2.5 text-foreground placeholder-foreground/30 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
           />
         </div>
