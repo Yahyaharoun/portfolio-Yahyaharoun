@@ -54,7 +54,7 @@ export default function ExperienceForm({ experience, onSuccess }: { experience?:
         setTitle("");
         setIsCurrent(false);
         setShowAdvanced(false);
-        e.currentTarget.reset();
+        form.reset();
       }
     } catch (err: any) {
       setError(err.message || "Une erreur est survenue.");

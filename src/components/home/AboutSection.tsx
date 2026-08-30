@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import * as LucideIcons from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { StackedCardCarousel } from "@/components/ui/StackedCardCarousel";
@@ -57,6 +57,7 @@ const defaultVisions: Vision[] = [
 export function AboutSection() {
   const [visions, setVisions] = useState<Vision[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedVision, setSelectedVision] = useState<Vision | null>(null);
 
   useEffect(() => {
     async function fetchVisions() {
@@ -84,7 +85,7 @@ export function AboutSection() {
   }, []);
 
   return (
-    <section id="about" className="mx-auto max-w-6xl px-6 py-32 scroll-mt-20 overflow-hidden">
+    <section id="about" className="mx-auto max-w-6xl px-6 py-32 scroll-mt-20 overflow-hidden relative">
       <div className="mb-20 text-center">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -154,9 +155,17 @@ export function AboutSection() {
                       <h3 className="mb-4 text-3xl sm:text-4xl font-black text-foreground drop-shadow-sm">
                         {vision.title}
                       </h3>
-                      <p className="text-base sm:text-lg leading-relaxed text-foreground/80 line-clamp-4">
+                      <p className="text-base sm:text-lg leading-relaxed text-foreground/80 line-clamp-3">
                         {vision.description}
                       </p>
+                      {isVisible && (
+                        <button 
+                          onClick={() => setSelectedVision(vision)}
+                          className="mt-4 text-accent hover:text-accent/80 font-bold text-sm flex items-center gap-1 transition-colors"
+                        >
+                          Lire la suite <LucideIcons.ArrowRight size={16} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -165,6 +174,57 @@ export function AboutSection() {
           />
         )}
       </div>
+
+      {/* Modal pour afficher la vision en entier */}
+      <AnimatePresence>
+        {selectedVision && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md" 
+              onClick={() => setSelectedVision(null)} 
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2.5rem] bg-[#0f0f14] border border-white/10 p-8 sm:p-12 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+            >
+              <button 
+                onClick={() => setSelectedVision(null)}
+                className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-foreground/70 hover:bg-white/10 hover:text-foreground transition-colors"
+              >
+                <LucideIcons.X size={20} />
+              </button>
+              
+              <div className="mb-8 flex items-center gap-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/20 text-accent shadow-lg ring-1 ring-accent/30">
+                  {selectedVision.icon_name && (LucideIcons as any)[selectedVision.icon_name] 
+                    ? React.createElement((LucideIcons as any)[selectedVision.icon_name], { size: 32 })
+                    : <DefaultIcon size={32} />
+                  }
+                </div>
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-accent">
+                    {selectedVision.category || "Valeur"}
+                  </span>
+                  <h3 className="text-3xl font-black text-foreground drop-shadow-sm">
+                    {selectedVision.title}
+                  </h3>
+                </div>
+              </div>
+              
+              <div className="prose prose-invert max-w-none">
+                <p className="text-lg leading-relaxed text-foreground/90 whitespace-pre-line">
+                  {selectedVision.description}
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

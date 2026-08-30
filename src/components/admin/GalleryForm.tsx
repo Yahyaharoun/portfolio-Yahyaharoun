@@ -88,7 +88,7 @@ export default function GalleryForm({ item, onSuccess }: { item?: GalleryItem, o
       if (!isEdit) {
         setTitle("");
         setImageUrl("");
-        e.currentTarget.reset();
+        form.reset();
       }
     } catch (err: any) {
       setError(err.message || "Une erreur est survenue.");

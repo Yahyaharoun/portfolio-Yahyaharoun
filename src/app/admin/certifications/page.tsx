@@ -8,10 +8,21 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminCertificationsPage() {
   const supabase = createServiceClient();
-  const { data: certifications } = await supabase
-    .from("certifications")
-    .select("*")
-    .order("sort_order", { ascending: true });
+  let certifications: Certification[] | null = null;
+  let fetchError = null;
+  
+  try {
+    const { data, error } = await supabase
+      .from("certifications")
+      .select("*")
+      .order("sort_order", { ascending: true });
+      
+    if (error) throw error;
+    certifications = data as Certification[];
+  } catch (error: any) {
+    console.error("Erreur lors de la récupération des certifications:", error);
+    fetchError = error.message;
+  }
 
   return (
     <div>
@@ -30,6 +41,11 @@ export default async function AdminCertificationsPage() {
       </div>
 
       <div className="overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+        {fetchError && (
+          <div className="m-4 rounded-lg bg-red-500/10 p-4 text-sm text-red-500 border border-red-500/20">
+            Une erreur est survenue lors du chargement: {fetchError}
+          </div>
+        )}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-black/5 dark:bg-white/5 text-foreground/70">
