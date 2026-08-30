@@ -20,15 +20,9 @@ function getIconForType(type: string | null) {
   }
 }
 
-function getColorForType(type: string | null, isObjective: boolean) {
-  if (isObjective) return "text-fuchsia-500 bg-fuchsia-500/10 border-fuchsia-500/20";
-  switch (type) {
-    case "bac": return "text-blue-500 bg-blue-500/10 border-blue-500/20";
-    case "univ": return "text-indigo-500 bg-indigo-500/10 border-indigo-500/20";
-    case "pro": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
-    case "perso": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
-    default: return "text-accent bg-accent/10 border-accent/20";
-  }
+function getColorForType(isGoal: boolean) {
+  if (isGoal) return "text-fuchsia-500 bg-fuchsia-500/10 border-fuchsia-500/20";
+  return "text-accent bg-accent/10 border-accent/20";
 }
 
 export function ExperiencesSection() {
@@ -108,12 +102,9 @@ export function ExperiencesSection() {
           <div className="space-y-12">
             {evolutions?.map((evo, index) => {
               const isEven = index % 2 === 0;
-              const typeColor = getColorForType(evo.type, evo.is_objective || false);
+              const typeColor = getColorForType(evo.is_goal || false);
               
-              let Icon = DefaultIcon;
-              if (evo.icon_name && (LucideIcons as any)[evo.icon_name]) {
-                Icon = (LucideIcons as any)[evo.icon_name];
-              }
+              let Icon = evo.is_goal ? Target : DefaultIcon;
               
               return (
                 <motion.div 
@@ -131,14 +122,14 @@ export function ExperiencesSection() {
 
                   {/* Carte Contenu */}
                   <div className={`w-full sm:w-1/2 ${isEven ? 'sm:pl-16' : 'sm:pr-16'}`}>
-                    <div className={`relative rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02] ${evo.is_objective ? 'bg-fuchsia-500/5 border-fuchsia-500/20' : 'bg-black/5 dark:bg-white/5 hover:border-accent/30'}`}>
+                    <div className={`relative rounded-3xl border border-white/10 p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02] ${evo.is_goal ? 'bg-fuchsia-500/5 border-fuchsia-500/20' : 'bg-black/5 dark:bg-white/5 hover:border-accent/30'}`}>
                       
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                         <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-foreground/20 backdrop-blur-md self-start">
                           <CalendarDays size={14} />
                           {evo.year}
                         </span>
-                        {evo.is_objective && (
+                        {evo.is_goal && (
                           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-fuchsia-500 uppercase tracking-widest">
                             <Target size={14} /> Objectif
                           </span>

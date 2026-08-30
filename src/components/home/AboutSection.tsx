@@ -18,6 +18,9 @@ const defaultVisions: Vision[] = [
     description: "Je suis étudiant en informatique et entrepreneur. Je construis des outils pragmatiques, pensés pour fonctionner dans des conditions réelles et imparfaites.",
     category: "valeur",
     icon_name: "Briefcase",
+    image_url: null,
+    sort_order: 1,
+    is_published: true,
   },
   {
     id: "vision",
@@ -25,6 +28,9 @@ const defaultVisions: Vision[] = [
     description: "Spécialisé dans la création de PWA et d'architectures Offline-First pour l'Afrique. L'objectif : l'application doit continuer à fonctionner sans réseau.",
     category: "afrique",
     icon_name: "Globe",
+    image_url: null,
+    sort_order: 2,
+    is_published: true,
   },
   {
     id: "philosophie",
@@ -32,6 +38,9 @@ const defaultVisions: Vision[] = [
     description: "L'intelligence artificielle transforme notre façon d'interagir. Je l'intègre de manière utile pour l'automatisation de processus complexes.",
     category: "ia",
     icon_name: "Cpu",
+    image_url: null,
+    sort_order: 3,
+    is_published: true,
   },
   {
     id: "objectif",
@@ -39,6 +48,9 @@ const defaultVisions: Vision[] = [
     description: "Me spécialiser en cybersécurité (DevSecOps), intégrant la sécurité dès la première ligne de code pour garantir la confidentialité des données.",
     category: "cybersecurite",
     icon_name: "ShieldCheck",
+    image_url: null,
+    sort_order: 4,
+    is_published: true,
   }
 ];
 

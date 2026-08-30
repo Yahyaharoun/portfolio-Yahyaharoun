@@ -75,7 +75,7 @@ export default async function AdminVisionsPage() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <DeleteEntityButton id={vision.id} entityType="vision" title={vision.title} />
+                      <DeleteEntityButton id={vision.id} table="vision" title={vision.title} />
                     </div>
                   </td>
                 </tr>

@@ -73,7 +73,7 @@ export default async function AdminCertificationsPage() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <DeleteEntityButton id={cert.id} entityType="certification" />
+                      <DeleteEntityButton id={cert.id} table="certification" title={cert.title} />
                     </div>
                   </td>
                 </tr>

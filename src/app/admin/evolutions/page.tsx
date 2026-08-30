@@ -83,7 +83,7 @@ export default async function AdminEvolutionsPage() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <DeleteEntityButton id={evo.id} entityType="evolution" />
+                      <DeleteEntityButton id={evo.id} table="evolution" title={evo.title} />
                     </div>
                   </td>
                 </tr>
