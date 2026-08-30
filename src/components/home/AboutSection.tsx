@@ -146,16 +146,16 @@ export function AboutSection() {
                       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/20 text-accent shadow-lg ring-1 ring-accent/30">
                         <Icon size={32} />
                       </div>
-                      <span className="rounded-full bg-black/20 dark:bg-white/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-foreground/70">
+                      <span className="rounded-full bg-white/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-white/70">
                         {vision.category || "Valeur"}
                       </span>
                     </div>
                     
                     <div className="mt-auto">
-                      <h3 className="mb-4 text-3xl sm:text-4xl font-black text-foreground drop-shadow-sm">
+                      <h3 className="mb-4 text-3xl sm:text-4xl font-black text-white drop-shadow-sm">
                         {vision.title}
                       </h3>
-                      <p className="text-base sm:text-lg leading-relaxed text-foreground/80 line-clamp-3">
+                      <p className="text-base sm:text-lg leading-relaxed text-white/80 line-clamp-3">
                         {vision.description}
                       </p>
                       {isVisible && (
@@ -190,11 +190,11 @@ export function AboutSection() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2.5rem] bg-[#0f0f14] border border-white/10 p-8 sm:p-12 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+              className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2.5rem] bg-background border border-black/10 dark:border-white/10 p-8 sm:p-12 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
             >
               <button 
                 onClick={() => setSelectedVision(null)}
-                className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-foreground/70 hover:bg-white/10 hover:text-foreground transition-colors"
+                className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/5 dark:bg-white/5 text-foreground/70 hover:bg-black/10 dark:hover:bg-white/10 hover:text-foreground transition-colors"
               >
                 <LucideIcons.X size={20} />
               </button>
