@@ -123,9 +123,12 @@ export function AboutSection() {
 
               return (
                 <div 
+                  onClick={() => {
+                    if (isVisible) setSelectedVision(vision);
+                  }}
                   className={`relative flex h-[350px] sm:h-[400px] w-full flex-col justify-between overflow-hidden rounded-[2.5rem] border border-white/10 p-8 sm:p-10 shadow-2xl transition-all duration-500
                     ${isVisible 
-                      ? 'bg-gradient-to-br from-black/80 to-black/40 dark:from-white/10 dark:to-white/5 backdrop-blur-xl' 
+                      ? 'bg-gradient-to-br from-black/80 to-black/40 dark:from-white/10 dark:to-white/5 backdrop-blur-xl cursor-pointer hover:ring-2 hover:ring-accent/50' 
                       : 'bg-black/40 dark:bg-white/5 backdrop-blur-sm'
                     }
                   `}
@@ -133,15 +136,15 @@ export function AboutSection() {
                   {/* Image de fond en option */}
                   {vision.image_url && (
                     <div 
-                      className="absolute inset-0 z-0 opacity-20 mix-blend-overlay transition-opacity duration-700" 
+                      className="absolute inset-0 z-0 opacity-20 mix-blend-overlay transition-opacity duration-700 pointer-events-none" 
                       style={{ backgroundImage: `url(${vision.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }} 
                     />
                   )}
                   
                   {/* Effet Glow au survol */}
-                  <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent/20 blur-[80px]" />
+                  <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent/20 blur-[80px] pointer-events-none" />
 
-                  <div className="relative z-10 flex flex-col gap-6 h-full">
+                  <div className="relative z-10 flex flex-col gap-6 h-full pointer-events-none">
                     <div className="flex items-center justify-between">
                       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/20 text-accent shadow-lg ring-1 ring-accent/30">
                         <Icon size={32} />
@@ -159,12 +162,9 @@ export function AboutSection() {
                         {vision.description}
                       </p>
                       {isVisible && (
-                        <button 
-                          onClick={() => setSelectedVision(vision)}
-                          className="mt-4 text-accent hover:text-accent/80 font-bold text-sm flex items-center gap-1 transition-colors"
-                        >
+                        <div className="mt-4 text-accent font-bold text-sm flex items-center gap-1 transition-colors">
                           Lire la suite <LucideIcons.ArrowRight size={16} />
-                        </button>
+                        </div>
                       )}
                     </div>
                   </div>

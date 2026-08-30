@@ -214,14 +214,17 @@ export function ExperiencesSection() {
             renderItem={(evo, index, isVisible) => {
               return (
                 <div 
+                  onClick={() => {
+                    if (isVisible) setSelectedExperience(evo);
+                  }}
                   className={`relative flex h-[350px] sm:h-[400px] w-full flex-col justify-between overflow-hidden rounded-[2.5rem] border border-white/10 p-8 shadow-2xl transition-all duration-500
                     ${isVisible 
-                      ? (evo.is_goal ? 'bg-gradient-to-br from-fuchsia-900/80 to-fuchsia-900/40 backdrop-blur-xl border-fuchsia-500/30' : 'bg-gradient-to-br from-black/80 to-black/40 dark:from-white/10 dark:to-white/5 backdrop-blur-xl')
+                      ? (evo.is_goal ? 'bg-gradient-to-br from-fuchsia-900/80 to-fuchsia-900/40 backdrop-blur-xl border-fuchsia-500/30 cursor-pointer hover:ring-2 hover:ring-fuchsia-500/50' : 'bg-gradient-to-br from-black/80 to-black/40 dark:from-white/10 dark:to-white/5 backdrop-blur-xl cursor-pointer hover:ring-2 hover:ring-accent/50')
                       : 'bg-black/40 dark:bg-white/5 backdrop-blur-sm'
                     }
                   `}
                 >
-                  <div className="relative z-10 flex flex-col h-full">
+                  <div className="relative z-10 flex flex-col h-full pointer-events-none">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                       <div className="flex items-center gap-3">
                         <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${evo.is_goal ? 'bg-fuchsia-500/20 text-fuchsia-500' : 'bg-accent/20 text-accent'}`}>
@@ -255,12 +258,9 @@ export function ExperiencesSection() {
                             {evo.description}
                           </p>
                           {isVisible && (
-                            <button 
-                              onClick={() => setSelectedExperience(evo)}
-                              className="mt-4 text-accent hover:text-accent/80 font-bold text-sm flex items-center gap-1 transition-colors"
-                            >
+                            <div className="mt-4 text-accent font-bold text-sm flex items-center gap-1 transition-colors">
                               Détails <ArrowRight size={16} />
-                            </button>
+                            </div>
                           )}
                         </>
                       )}

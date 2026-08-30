@@ -128,7 +128,7 @@ export function StackedCardCarousel<T>({
       </div>
 
       {/* Contrôles manuels (Boutons flottants) */}
-      <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 sm:px-4 pointer-events-none z-50">
+      <div className="absolute inset-y-0 left-0 right-0 hidden sm:flex items-center justify-between px-2 sm:px-4 pointer-events-none z-50">
         <button
           onClick={prevSlide}
           className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white transition-all hover:bg-black/40 hover:scale-110 focus:outline-none"

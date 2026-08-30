@@ -24,8 +24,6 @@ export default function CertificationForm({ initialData }: { initialData?: Certi
       issue_date: formData.get("issue_date") as string,
       credential_url: formData.get("credential_url") as string,
       image_url: formData.get("image_url") as string,
-      sort_order: parseInt((formData.get("sort_order") as string) || "0", 10),
-      is_published: formData.get("is_published") === "true",
     };
 
     try {
@@ -91,33 +89,18 @@ export default function CertificationForm({ initialData }: { initialData?: Certi
           </div>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div className="space-y-2">
-            <label htmlFor="issue_date" className="text-sm font-semibold text-foreground">
-              Date d'obtention
-            </label>
-            <input
-              type="text"
-              id="issue_date"
-              name="issue_date"
-              defaultValue={initialData?.issue_date || ""}
-              placeholder="Ex: Octobre 2023"
-              className="w-full rounded-lg border border-black/20 dark:border-white/20 bg-background px-4 py-2.5 text-foreground placeholder-foreground/30 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="sort_order" className="text-sm font-semibold text-foreground">
-              Ordre d'affichage
-            </label>
-            <input
-              type="number"
-              id="sort_order"
-              name="sort_order"
-              defaultValue={(initialData as any)?.sort_order ?? 0}
-              className="w-full rounded-lg border border-black/20 dark:border-white/20 bg-background px-4 py-2.5 text-foreground placeholder-foreground/30 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-            />
-          </div>
+        <div className="space-y-2">
+          <label htmlFor="issue_date" className="text-sm font-semibold text-foreground">
+            Date d'obtention
+          </label>
+          <input
+            type="text"
+            id="issue_date"
+            name="issue_date"
+            defaultValue={initialData?.issue_date || ""}
+            placeholder="Ex: Octobre 2023"
+            className="w-full rounded-lg border border-black/20 dark:border-white/20 bg-background px-4 py-2.5 text-foreground placeholder-foreground/30 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          />
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">
@@ -147,25 +130,6 @@ export default function CertificationForm({ initialData }: { initialData?: Certi
               placeholder="https://..."
               className="w-full rounded-lg border border-black/20 dark:border-white/20 bg-background px-4 py-2.5 text-foreground placeholder-foreground/30 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
             />
-          </div>
-        </div>
-
-        <div className="flex gap-6 pt-4">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-black/20 dark:bg-white/20">
-              <input
-                type="checkbox"
-                id="is_published"
-                name="is_published"
-                value="true"
-                defaultChecked={(initialData as any)?.is_published ?? true}
-                className="peer absolute inset-0 h-full w-full cursor-pointer opacity-0"
-              />
-              <span className="pointer-events-none absolute left-1 h-4 w-4 rounded-full bg-white transition-all peer-checked:left-6 peer-checked:bg-accent"></span>
-            </div>
-            <label htmlFor="is_published" className="cursor-pointer text-sm font-semibold text-foreground">
-              Publier cette certification
-            </label>
           </div>
         </div>
 
