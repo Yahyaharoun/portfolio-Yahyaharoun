@@ -23,6 +23,8 @@ export default function CVAdminPage() {
   const [profile, setProfile] = useState<any>(null);
   const [experiences, setExperiences] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
+  const [evolutions, setEvolutions] = useState<any[]>([]);
+  const [certifications, setCertifications] = useState<any[]>([]);
 
   // CV Data state
   const [cvId, setCvId] = useState<string | null>(null);
@@ -76,6 +78,12 @@ export default function CVAdminPage() {
         })));
       }
 
+      const { data: evoData } = await supabase.from("evolutions").select("*").eq("is_published", true).order("sort_order", { ascending: true });
+      if (evoData) setEvolutions(evoData);
+
+      const { data: certData } = await supabase.from("certifications").select("*").eq("is_published", true).order("issue_date", { ascending: false });
+      if (certData) setCertifications(certData);
+
     } catch (err) {
       console.error(err);
     } finally {
@@ -104,7 +112,7 @@ export default function CVAdminPage() {
         summary,
         skills,
         languages,
-        education,
+        education: [], // We don't save manual education anymore
         custom_sections: customSections,
         is_active: true,
         full_name: "Yahya Haroun",
@@ -146,14 +154,6 @@ export default function CVAdminPage() {
     setLanguages(newLangs);
   };
 
-  const addEducation = () => setEducation([...education, { title: "", institution: "", year: "" }]);
-  const removeEducation = (idx: number) => setEducation(education.filter((_, i) => i !== idx));
-  const updateEducation = (idx: number, field: "title" | "institution" | "year", val: string) => {
-    const newEdu = [...education];
-    newEdu[idx][field] = val;
-    setEducation(newEdu);
-  };
-
   const addCustomSection = () => setCustomSections([...customSections, { title: "", content: "" }]);
   const removeCustomSection = (idx: number) => setCustomSections(customSections.filter((_, i) => i !== idx));
   const updateCustomSection = (idx: number, field: "title" | "content", val: string) => {
@@ -169,7 +169,6 @@ export default function CVAdminPage() {
     summary,
     skills,
     languages,
-    education,
     custom_sections: customSections,
   };
 
@@ -191,7 +190,7 @@ export default function CVAdminPage() {
               className="hidden lg:flex items-center gap-2 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-4 py-2 font-medium hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
             >
               {showPreview ? <LayoutPanelLeft size={16} /> : <LayoutTemplate size={16} />}
-              {showPreview ? "Cacher Aperçu" : "Afficher Aperçu"}
+              {showPreview ? "Cacher Aperçu" : "Aperçu"}
             </button>
             <button 
               onClick={handleSave} 
@@ -255,48 +254,11 @@ export default function CVAdminPage() {
               />
             </div>
 
-        {/* Formations (Education) */}
-        <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-muted p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold">Formations</h2>
-            <button onClick={addEducation} className="flex items-center gap-1 text-sm text-accent font-medium hover:underline">
-              <Plus size={16} /> Ajouter
-            </button>
-          </div>
-          <div className="space-y-4">
-            {education.map((edu, idx) => (
-              <div key={idx} className="flex gap-4 items-start bg-background p-4 rounded-xl border border-black/5 dark:border-white/5">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
-                  <input
-                    type="text"
-                    value={edu.title}
-                    onChange={(e) => updateEducation(idx, "title", e.target.value)}
-                    placeholder="Titre (ex: Master Cybersécurité)"
-                    className="w-full rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-3 py-2 text-sm focus:border-accent focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    value={edu.institution}
-                    onChange={(e) => updateEducation(idx, "institution", e.target.value)}
-                    placeholder="Établissement"
-                    className="w-full rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-3 py-2 text-sm focus:border-accent focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    value={edu.year}
-                    onChange={(e) => updateEducation(idx, "year", e.target.value)}
-                    placeholder="Année (ex: 2023 - 2025)"
-                    className="w-full rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-3 py-2 text-sm focus:border-accent focus:outline-none"
-                  />
-                </div>
-                <button onClick={() => removeEducation(idx)} className="text-red-500 p-2 hover:bg-red-500/10 rounded-lg">
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            ))}
-            {education.length === 0 && <p className="text-sm text-foreground/50">Aucune formation ajoutée.</p>}
-          </div>
-        </div>
+            <div className="rounded-2xl border border-accent/20 bg-accent/5 p-4 flex items-center justify-center">
+              <p className="text-sm text-accent font-medium text-center">
+                Les sections <strong>Expériences</strong>, <strong>Diplômes</strong> (depuis Mon Évolution), <strong>Certifications</strong> et <strong>Projets</strong> sont synchronisées automatiquement depuis vos autres pages d'administration.
+              </p>
+            </div>
 
         {/* Compétences (Skills) */}
         <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-muted p-6">
@@ -321,7 +283,7 @@ export default function CVAdminPage() {
                     type="text"
                     value={skillGroup.items.join(", ")}
                     onChange={(e) => updateSkillItems(idx, e.target.value)}
-                    placeholder="Compétences séparées par des virgules (ex: React, Next.js, Vue)"
+                    placeholder="Compétences (virgules)"
                     className="w-full rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-3 py-2 text-sm focus:border-accent focus:outline-none"
                   />
                 </div>
@@ -421,6 +383,8 @@ export default function CVAdminPage() {
               cvData={liveCvData}
               experiences={experiences}
               projects={projects}
+              evolutions={evolutions}
+              certifications={certifications}
             />
           </PDFViewer>
         </div>

@@ -77,14 +77,7 @@ export async function GET() {
       .eq('is_published', true)
       .order('sort_order', { ascending: true });
 
-    // Remplacer les vieilles formations manuelles par les Evolutions dynamiques
-    if (evolutions && evolutions.length > 0) {
-      cvData.education = evolutions.map(evo => ({
-        title: evo.title,
-        institution: evo.organization,
-        year: evo.year
-      }));
-    }
+
 
     // 5. ENVOI DE LA NOTIFICATION PUSH À L'ADMIN
     try {
@@ -138,6 +131,7 @@ export async function GET() {
         experiences={experiences || []} 
         projects={formattedProjects}
         certifications={certifications || []}
+        evolutions={evolutions || []}
       />
     );
 
